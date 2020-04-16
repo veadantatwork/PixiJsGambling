@@ -23,13 +23,13 @@ function DrawDynamicRect() {
     graphics.drawRect(0, 25, app.screen.width, 30);
     graphics.beginFill(0x13463d);
     graphics.drawRect(0, 525, app.screen.width, 500);
-
+    
 }
 
 
 
 function drawCards() {
-    if (dynamicCounter < -3 && dynamicCounter > -15) {//this is for showing two player card
+    if (dynamicCounter < -3 && dynamicCounter > -15) {
         drawText(0,"PLAYER",240,528);
         drawText(1,"HIGH CARD",230,607);
         graphics.alpha = 0.25;
@@ -40,8 +40,8 @@ function drawCards() {
             mSprit_Cards[i].position.set(255 + i * 34, 580);
         }
     }
-    if (dynamicCounter <= -15 && dynamicCounter > -20) {//this is for showing five player card including(boat card)
-
+    if (dynamicCounter <= -15 && dynamicCounter > -20) {
+        
         graphics.alpha = 0.25;
         graphics.beginFill(0x000000);
         graphics.drawRect(150, 525, app.screen.width - 300, 100);
@@ -50,13 +50,13 @@ function drawCards() {
             mSprit_Cards[i].position.set(205 + i * 34, 580);
         }
     }
-    if (dynamicCounter <= -20 && dynamicCounter > -30) {//this is for showing ten player and dealer card including(boat card)
+    if (dynamicCounter <= -20 && dynamicCounter > -30) {
         drawText(0,"DEALER WINS",240,528);
         drawText(1,"HIGH CARD",230,607);
-
+        
         drawText(2,"PLAYER",240,643);
         drawText(3,"HIGH CARD",230,720);
-
+        
         graphics.lineStyle(2, 0xf8db74);
         graphics.alpha = 0.5;
         graphics.beginFill(0x000000);
