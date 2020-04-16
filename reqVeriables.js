@@ -22,7 +22,7 @@ var txt_4_card = [];
 var dynamicCounter = 15;
 
 var currentbat = 0;
-var balance = 9999999;
+var balance = 999;
 
 var allcounter = 0;
 
@@ -52,3 +52,6 @@ var sprite_menu, sprite_repeat,sprite_undo; // button for menu, undo and repeat
 var value4undo = [];
 var txtbottomLeft;//varible for showing balance text
 var txtbottomRight;//varible for showing balance text
+var trans_Background;
+var txtWait4Next,toolowbase;
+var tableBonus,tablePlay,tableANTE;

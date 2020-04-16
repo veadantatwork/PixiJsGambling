@@ -2,72 +2,87 @@
 let app = new Application({ width: 540, height: 1024, antialiasing: true, transparent: false, resolution: window.devicePixelRatio || 1 });
 var element = document.getElementById("anim");//HTML elemet for placing canvas for game
 element.appendChild(app.view);//Add app view in html element
+var basepath = "./assets/";
 //Image string that uses in game 
-var imageArr = ["assets/menu.png", "assets/repeat.png", "assets/undo.png", "assets/bonus.png", "assets/anteglow.png", "assets/ante.png", "assets/0.png", "assets/1.png", "assets/2.png", "assets/3.png", "assets/4.png", "assets/5.png", "assets/background.jpeg"];
+
+
+var imageArr = [basepath + "tableBonus.png", basepath + "tablePlay.png", basepath + "tableANTE.png", basepath + "opecity.png", basepath + "toolowbase.png",
+basepath + "menu.png", basepath + "repeat.png", basepath + "undo.png", basepath + "bonus.png", basepath + "anteglow.png", basepath + "ante.png", basepath + "0.png", basepath + "1.png", basepath + "2.png", basepath + "3.png", basepath + "4.png", basepath + "5.png", basepath + "background.jpeg"];
 for (var i = 2; i < 15; i++) {
-  imageArr.push("assets/cards/C" + i + ".png");//club card load
-  imageArr.push("assets/cards/D" + i + ".png");//Dimond card load
-  imageArr.push("assets/cards/H" + i + ".png");//Heart card load
-  imageArr.push("assets/cards/S" + i + ".png");//Spade card load
+  imageArr.push(basepath + "cards/C" + i + ".png");//club card load
+  imageArr.push(basepath + "cards/D" + i + ".png");//Dimond card load
+  imageArr.push(basepath + "cards/H" + i + ".png");//Heart card load
+  imageArr.push(basepath + "cards/S" + i + ".png");//Spade card load
 }
 // Load images
 loader.add(imageArr).on("progress", loadProgressHandler).load(setup);
 
 //for loading progress
 function loadProgressHandler(loader, resource) {
-  console.log("loading: " + resource.url);
-  console.log("progress: " + loader.progress + "%");
+  // console.log("loading: " + resource.url);
+  // console.log("progress: " + loader.progress + "%");
 }
 
 // Call after load all resources 
 function setup() {
-
-  background = new Sprite(resources["assets/background.jpeg"].texture);//create background Sprite
+  document.addEventListener('touchstart', e =>{toggleFullScreen();}); //toggle fullscreen for mobile
+  document.addEventListener('mousedown', e =>{toggleFullScreen();});  //toggle fullscreen for desktop
+  background = new Sprite(resources[basepath + "background.jpeg"].texture);//create background Sprite
   app.stage.addChild(background);//add background Sprite in app
+  trans_Background = new Sprite(resources[basepath + "opecity.png"].texture);//create background Sprite
   app.stage.addChild(graphics);//add graphics in app view for drowing Rectangles
-  sprite_undo = loadSprite("assets/undo.png", 112, 500, 610, 1);//create and add undo Sprite in app view with click event 112
-  sprite_repeat = loadSprite("assets/repeat.png", 111, 500, 810, 1);//create and add repeat Sprite in app view with click event 111
-  sprite_menu = loadSprite("assets/menu.png", 110, 500, 900, 1);//create and add menu Sprite in app view with click event 110
+
+
+  tableBonus = loadSprite(basepath + "tableBonus.png" , 113, 130, 435, 1);//create and add tableBonus Sprite in app view with click event 112
+  tablePlay = loadSprite(basepath + "tablePlay.png"   , 114, 222, 460, 1);//create and add tablePlay Sprite in app view with click event 112
+  tableANTE = loadSprite(basepath + "tableANTE.png"   , 115, 320, 460, 1);//create and add tableANTE Sprite in app view with click event 112
+
+  sprite_undo = loadSprite(basepath + "undo.png", 112, 500, 610, 1);//create and add undo Sprite in app view with click event 112
+  sprite_repeat = loadSprite(basepath + "repeat.png", 111, 500, 810, 1);//create and add repeat Sprite in app view with click event 111
+  sprite_menu = loadSprite(basepath + "menu.png", 110, 500, 900, 1);//create and add menu Sprite in app view with click event 110
+  app.stage.addChild(trans_Background);//add background Sprite in app
+  trans_Background.visible = false;
   // Require small coin for flying animation  
   for (let i = 0; i < coinArray.length; i++) {
-    coinArray[i] = loadSprite("assets/" + i + ".png", i, posx, posy, 1);//create and add coinArray Sprite in app view with click event i(0 to 5)
+    coinArray[i] = loadSprite(basepath + "" + i + ".png", i, posx, posy, 1);//create and add coinArray Sprite in app view with click event i(0 to 5)
   }
-
   // Require big coin for flying animation  
   for (let i = 0; i < coinArrayBig.length; i++) {
-    coinArrayBig[i] = loadSprite("assets/" + i + ".png", i + 6, posx, posy, 1.5);//create and add coinArrayBig Sprite in app view with click event i + 6(6 to 11)
+    coinArrayBig[i] = loadSprite(basepath + "" + i + ".png", i + 6, posx, posy, 1.5);//create and add coinArrayBig Sprite in app view with click event i + 6(6 to 11)
     coinArrayBig[i].visible = selCoin == 0;//set visible big coin 
   }
-
-  sprite_GlowAnte = loadSprite("assets/anteglow.png", -1, 270, 840, 1);//create and add sprite_GlowAnte Sprite in app view
+  console.log("Boolean(10 > 9)" + Math.random());
+  console.log(compRan());
+  sprite_GlowAnte = loadSprite(basepath + "anteglow.png", -1, 270, 840, 1);//create and add sprite_GlowAnte Sprite in app view
   sprite_GlowAnte.vx = 1;//set sprite_GlowAnte scale 
   sprite_GlowAnte.vy = .01;//for animating glow by scale fector 
   // Require to load for ANTE button
-  spriteAnte = loadSprite("assets/ante.png", 100, 270, 840, 1);//create and add Ante Sprite in app view with click event 100
-
+  spriteAnte = loadSprite(basepath + "ante.png", 100, 270, 840, 1);//create and add Ante Sprite in app view with click event 100
   // Require to load for Bonus button
-  sprite_bonus = loadSprite("assets/bonus.png", 101, 170, 688, 1);//create and add bonus in app view with click event 101
-
+  sprite_bonus = loadSprite(basepath + "bonus.png", 101, 170, 688, 1);//create and add bonus in app view with click event 101
   txtBalance = loadText({ fill: "#9e9b4d", fontSize: 20, fontWeight: "bold" });//create and add Balance Text in app view
   txtBat = loadText({ fill: "#9e9b4d", fontSize: 20, fontWeight: "bold" });//create and add Bat Text in app view
   txtDydnamic = loadText({ fill: "#fafafa", fontSize: 25, fontWeight: "normal" });//create and add Dydnamic Text in app view
   txtbottomLeft = loadText({ fill: "#fafafa", fontSize: 15, fontWeight: "normal" });//create and add Dydnamic Text in app view
-  txtbottomLeft.position.set(10,1000);
+  txtbottomLeft.position.set(10, 1000);
   txtbottomLeft.text = 'Left Test';
   txtbottomRight = loadText({ fill: "#fafafa", fontSize: 15, fontWeight: "normal" });//create and add Dydnamic Text in app view
-  txtbottomRight.position.set(400,1000);
+  txtbottomRight.position.set(400, 1000);
   txtbottomRight.text = 'txtbottomRight Test';
+
+  toolowbase = loadSprite_2(basepath + "toolowbase.png", 455, 710, 1.2);
+  txtWait4Next = loadText({ fill: "#fafafa", fontSize: 15, fontWeight: "normal" });
+  txtWait4Next.position.set(400, 700);
+  txtWait4Next.text = 'Balance too low';
+  txtWait4Next.myCustomProperty = 1;
+
   for (var i = 0; i < 4; i++) {
     txt_4_card.push(loadText({ fill: "#fafafa", fontSize: 15, fontWeight: "normal" }));//create and add text for card like "player","dealer","High card" in app view
     txt_4_card[i].visible = false;
   }
-
-
-
   setVisible(true);//set visiblity of coins and button
   resetValue();//call function for reset app related values
   timeoutHandle = setTimeout(nextTurn, 1000);//set timeout function for game dynamicCounter
-
   //Calling play recursive for rendering 
   state = play;
   app.ticker.add(delta => gameLoop(delta));
@@ -120,16 +135,37 @@ function onButtonClick(e) {
     return;
   }
   switch (e.target.myCustomProperty) {
+    case 113:case 114:case 115: 
+    if(dynamicCounter<0)
+    {
+      txtWait4Next.myCustomProperty = 100;
+        txtWait4Next.position.set(210, 350);
+        txtWait4Next.text = "Wait for next game";
+    }
+    return;//click for menu button
     case 110: return;//click for menu button
     case 111: sendCoinonTable(500, 810, 320, 458); return;//click for reapeat button
     case 112: undoValuse();
       return;//click for undo button
     case 101://click for bonus button
-      sendCoinonTable(170, 688, 135, 445);
+      if (coinValue[selCoin] > balance) {
+        txtWait4Next.myCustomProperty = 100;
+        txtWait4Next.position.set(sprite_bonus.x, sprite_bonus.y - 50);
+        txtWait4Next.text = 'Balance too low ';
+      } else {
+        sendCoinonTable(170, 688, 135, 445);
+      }
       return;
     case 100://click for ANTE button
-      sendCoinonTable(270, 840, 320, 458);
-      selBigSprite.push(loadSprite("assets/" + selCoin + ".png", -1, 270, 840, 1.5));
+      if (coinValue[selCoin] > balance) {
+        txtWait4Next.myCustomProperty = 100;
+        txtWait4Next.position.set(spriteAnte.x, spriteAnte.y - 50);
+        txtWait4Next.text = 'Balance too low';
+      } else {
+        sendCoinonTable(270, 840, 320, 458);
+        selBigSprite.push(loadSprite(basepath + "" + selCoin + ".png", -1, 270, 840, 1.5));
+      }
+
       return;
     default:// click for all coinArrayBig & coinArray coin
       if (coinArray[2].x > posx - 10) { //coin flying open animation start
@@ -146,16 +182,25 @@ function onButtonClick(e) {
         goOut = -0.2;//set horizontal direction for flying coin and bigcoin
         count = 0;//set cont for flying animation
       } else { ////coin flying cloase animation start
+
         for (let i = 0; i < coinArray.length; i++) {
           coinArray[i].vx = Math.sin((5 - i) * 36 * (Math.PI / 180)) * speed;//set horizontal direction for flying coin close
           coinArray[i].vy = -Math.cos((5 - i) * 36 * (Math.PI / 180)) * speed;//set verticle direction for flying coin close
           if (e.target.myCustomProperty < 6) {// set selCoin coin when click on small coin condition
             coinArrayBig[i].visible = e.target.myCustomProperty == i;// set visible true of big coin when click on respective small coin
             selCoin = e.target.myCustomProperty;// set selCoin coin when click on small coin
+            console.log(i + " txtWait4Next.y = " + txtWait4Next.y);
           }
         }
         goOut = 0.2;//set horizontal direction for flying coin and bigcoin
         count = 0;//set cont for flying animation
+
+
+        if (coinValue[selCoin] > balance) {
+          txtWait4Next.myCustomProperty = 100;
+          txtWait4Next.position.set(400, coinArray[selCoin].y - 50);
+          txtWait4Next.text = 'Too low balance';
+        }
 
       }
       return;
@@ -194,6 +239,7 @@ function setVisible(isvisible) {//set visiblity of bat button and coin
   spriteAnte.visible = isvisible;
   sprite_bonus.visible = isvisible;
   sprite_GlowAnte.visible = isvisible;
+  trans_Background.visible = false;
 }
 function resetValue() {//reset game valuse
   currentbat = 0;//reset bet of game
@@ -210,8 +256,8 @@ function resetValue() {//reset game valuse
     app.stage.removeChild(mSprit_Cards[i]);//remove all cards that uses for player(2) dealer(5) and deal(5) 
   }
   mSprit_Cards.length = 0;
-  for (var i = 0; i < 9; i++) {//asign all cards that uses for player(2) dealer(5) and deal(5) 
-    mSprit_Cards.push(loadSprite_2("assets/cards/" + cards[i] + ".png", 100 + i * 34, 600, .25));
+  for (var i = 0; i < 10; i++) {//asign all cards that uses for player(2) dealer(5) and deal(5) 
+    mSprit_Cards.push(loadSprite_2(basepath + "cards/" + cards[i] + ".png", 100 + i * 34, 600, .25));
   }
   for (var i = 0; i < txt_4_card.length; i++) {
     txt_4_card[i].visible = false;//false visible text for card like "player","dealer","High card" in app view
@@ -227,9 +273,9 @@ function make_deck() {//asign card valus
     cards[j++] = "C" + i;
     cards[j++] = "S" + i;
   }
-  console.log(cards);
+  // console.log(cards);
   shuffle();
-  console.log(cards);
+  // console.log(cards);
 }
 function shuffle() {
   deck_index = 0;
@@ -265,3 +311,10 @@ window.onresize = function (event) {
   console.log("ancho,alto");
   resize();
 };
+
+function toggleFullScreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+
+  }
+}

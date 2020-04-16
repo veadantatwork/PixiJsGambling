@@ -8,8 +8,17 @@ function coinAnim() {
             coinArray[i].rotation = (Math.PI * speed * count) / 55;//(count*Math.PI)*0.02;
             coinArrayBig[i].x += goOut * 4;
         }
+        if (coinArray[2].vx > 0)//alph animation
+            trans_Background.alpha -= .05;
+        else
+            trans_Background.alpha += .05;
+        trans_Background.visible = true;
         count++;
     } else {
+        if (coinArray[2].vx > 0) {
+            trans_Background.visible = false;
+            trans_Background.alpha = .5;
+        }
         goOut = 0;
     }
     //for coin movment from bonus/ANTE to table
@@ -49,6 +58,16 @@ function coinAnim() {
         sprite_GlowAnte.vx += sprite_GlowAnte.vy;
     }
 
+    if (txtWait4Next.myCustomProperty > 0) {
+        txtWait4Next.myCustomProperty--;
+        txtWait4Next.visible = true;
+        toolowbase.visible = true;
+        toolowbase.position.set(txtWait4Next.x + 62, txtWait4Next.y + 10);
+        if (txtWait4Next.myCustomProperty == 0) {
+            txtWait4Next.visible = false;
+            toolowbase.visible = false;
+        }
+    }
 }
 
 //Common function for movment coin from one place to other
@@ -62,7 +81,7 @@ function sendCoinonTable(stratx, starty, endx, endy) {
 
     var thita = getAngle(stratx, starty, endx, endy);//Get direction angle
 
-    let sprite = new Sprite(resources["assets/" + selCoin + ".png"].texture);
+    let sprite = new Sprite(resources[basepath + selCoin + ".png"].texture);
     sprite.x = stratx;
     sprite.y = starty;
     sprite.ex = endx;
@@ -103,7 +122,7 @@ var getAngle = function (currX, currY, endX, endY) {
 function undoValuse() {
     if (value4undo.length > 0) {
         var bat = value4undo.pop();
-        
+
         currentbat -= bat;
         balance += bat;
 
