@@ -1,7 +1,7 @@
 
-var rouletteText = [];
-var rouletteNumber = [];
-let rouletteTable = new PIXI.Graphics();
+var rollateText = [];
+var rollateNumber = [];
+let rollateTable = new PIXI.Graphics();
 let container = new PIXI.Container();
 let colorRed = 0xb71e04;
 let colorBlock = 0x19171a;
@@ -31,23 +31,23 @@ let polyTop_f = [374, 172, 396, 240, 310, 240, 298, 215];
 
 let itsOval = false;
 
-function loadroulette() {
-    container.addChild(rouletteTable);
+function loadRollate() {
+    container.addChild(rollateTable);
     app.stage.addChild(container);
     for (let i = 0; i < 50; i++) {
-        rouletteText.push(loadRolletText({ fill: colorWhite, fontSize: 20, fontWeight: "normal" }, (i + 1)));
-        container.addChild(rouletteText[i]);
-        rouletteText[i].position.set(-200, -200);
+        rollateText.push(loadRolletText({ fill: colorWhite, fontSize: 20, fontWeight: "normal" }, (i + 1)));
+        container.addChild(rollateText[i]);
+        rollateText[i].position.set(-200, -200);
     }
     for (let i = 0; i < 15; i++) {
         if (Math.floor(Math.random() * 37) % 2 == 0)
-            rouletteNumber.push(loadRolletText({ fill: colorWhite, fontSize: 20, fontWeight: "bold" }, (i + 1)));
+            rollateNumber.push(loadRolletText({ fill: colorWhite, fontSize: 20, fontWeight: "bold" }, (i + 1)));
         else
-            rouletteNumber.push(loadRolletText({ fill: colorRed, fontSize: 20, fontWeight: "bold" }, (i + 1)));
-        app.stage.addChild(rouletteNumber[i]);
-        rouletteNumber[i].position.set(20 + i * 40, 60);
-        rouletteNumber[i].text = Math.floor(Math.random() * 37) + "";
-        rouletteNumber[i].visible = false;
+            rollateNumber.push(loadRolletText({ fill: colorRed, fontSize: 20, fontWeight: "bold" }, (i + 1)));
+        app.stage.addChild(rollateNumber[i]);
+        rollateNumber[i].position.set(20 + i * 40, 60);
+        rollateNumber[i].text = Math.floor(Math.random() * 37) + "";
+        rollateNumber[i].visible = false;
     }
     container.visible = false;
 }
@@ -70,158 +70,158 @@ function drawRoullete() {
             }
         }
     }
-    // rouletteTable.drawRect(0, 25, app.screen.width, 30);
+    // rollateTable.drawRect(0, 25, app.screen.width, 30);
 
     // drawRectangle_Table();
-    // rouletteTable.drawRect(0, 525, app.screen.width, 500);
+    // rollateTable.drawRect(0, 525, app.screen.width, 500);
     //drawRectangle_Table();
     //draw_Oval_Table();
-    // setroulette(true);
+    // setRollate(true);
 }
 
 function draw_Oval_Table() {
     console.log("draw_Oval_Table");
-    rouletteTable.clear();
+    rollateTable.clear();
 
-    rouletteTable.lineStyle(2, colorLine); //yellow
+    rollateTable.lineStyle(2, colorLine); //yellow
     for (let i = 0; i < 13; i++) {
         if (i % 2 != 0) {
-            rouletteTable.beginFill(colorRed);
+            rollateTable.beginFill(colorRed);
         } else {
-            rouletteTable.beginFill(colorBlock);
+            rollateTable.beginFill(colorBlock);
         }
-        rouletteTable.drawRect(60, 240 + 43 * i, 88, 43);
+        rollateTable.drawRect(60, 240 + 43 * i, 88, 43);
         if (i % 2 == 0) {
-            rouletteTable.beginFill(colorRed);
+            rollateTable.beginFill(colorRed);
         } else {
-            rouletteTable.beginFill(colorBlock);
+            rollateTable.beginFill(colorBlock);
         }
-        rouletteTable.drawRect(310, 240 + 43 * i, 88, 43);
-        rouletteText[i].position.set(90, 250 + 43 * i);
-        rouletteText[i].text = val_Oval_Left[i];
-        rouletteText[i + 13].position.set(340, 250 + 43 * i);
-        rouletteText[i + 13].text = val_Oval_right[i];
+        rollateTable.drawRect(310, 240 + 43 * i, 88, 43);
+        rollateText[i].position.set(90, 250 + 43 * i);
+        rollateText[i].text = val_Oval_Left[i];
+        rollateText[i + 13].position.set(340, 250 + 43 * i);
+        rollateText[i + 13].text = val_Oval_right[i];
     }
     // polyBottoma[4] = 163 + rx;
     // polyBottoma[5] = 824 + ry;
 
-    rouletteTable.beginFill(colorRed);
-    rouletteTable.drawPolygon(polyTop_a);
-    rouletteTable.beginFill(colorBlock);
-    rouletteTable.drawPolygon(polyTop_b);
-    rouletteTable.beginFill(colorRed);
-    rouletteTable.drawPolygon(polyTop_c);
-    rouletteTable.beginFill(colorBlock);
-    rouletteTable.drawPolygon(polyTop_d);
-    rouletteTable.beginFill(colorRed);
-    rouletteTable.drawPolygon(polyTop_e);
-    rouletteTable.beginFill(colorBlock);
-    rouletteTable.drawPolygon(polyTop_f);
+    rollateTable.beginFill(colorRed);
+    rollateTable.drawPolygon(polyTop_a);
+    rollateTable.beginFill(colorBlock);
+    rollateTable.drawPolygon(polyTop_b);
+    rollateTable.beginFill(colorRed);
+    rollateTable.drawPolygon(polyTop_c);
+    rollateTable.beginFill(colorBlock);
+    rollateTable.drawPolygon(polyTop_d);
+    rollateTable.beginFill(colorRed);
+    rollateTable.drawPolygon(polyTop_e);
+    rollateTable.beginFill(colorBlock);
+    rollateTable.drawPolygon(polyTop_f);
 
 
-    rouletteTable.beginFill(colorRed);
-    rouletteTable.drawPolygon(polyBottom_a);
-    rouletteTable.beginFill(colorGreen);
-    rouletteTable.drawPolygon(polyBottom_b);
-    rouletteTable.beginFill(colorBlock);
-    rouletteTable.drawPolygon(polyBottom_c);
-    rouletteTable.beginFill(colorRed);
-    rouletteTable.drawPolygon(polyBottom_d);
-    rouletteTable.beginFill(colorBlock);
-    rouletteTable.drawPolygon(polyBottom_e);
+    rollateTable.beginFill(colorRed);
+    rollateTable.drawPolygon(polyBottom_a);
+    rollateTable.beginFill(colorGreen);
+    rollateTable.drawPolygon(polyBottom_b);
+    rollateTable.beginFill(colorBlock);
+    rollateTable.drawPolygon(polyBottom_c);
+    rollateTable.beginFill(colorRed);
+    rollateTable.drawPolygon(polyBottom_d);
+    rollateTable.beginFill(colorBlock);
+    rollateTable.drawPolygon(polyBottom_e);
 
     for (let i = 0; i < 6; i++) {
-        rouletteText[26 + i].text = val_Oval_top[i];
+        rollateText[26 + i].text = val_Oval_top[i];
 
     }
     for (let i = 0; i < 5; i++) {
-        rouletteText[32 + i].text = val_Ovalbottom[i];
+        rollateText[32 + i].text = val_Ovalbottom[i];
 
     }
 
-    rouletteText[26].position.set(100, 205);
-    rouletteText[27].position.set(140, 165);
-    rouletteText[28].position.set(190, 145);
-    rouletteText[29].position.set(246, 145);
-    rouletteText[30].position.set(304, 157);
-    rouletteText[31].position.set(340, 205);
+    rollateText[26].position.set(100, 205);
+    rollateText[27].position.set(140, 165);
+    rollateText[28].position.set(190, 145);
+    rollateText[29].position.set(246, 145);
+    rollateText[30].position.set(304, 157);
+    rollateText[31].position.set(340, 205);
 
-    rouletteText[32].position.set(102, 813);
+    rollateText[32].position.set(102, 813);
 
-    rouletteText[33].position.set(150, 850);
-    rouletteText[34].position.set(220, 865);
-    rouletteText[35].position.set(290, 855);
-    rouletteText[36].position.set(340, 815);
+    rollateText[33].position.set(150, 850);
+    rollateText[34].position.set(220, 865);
+    rollateText[35].position.set(290, 855);
+    rollateText[36].position.set(340, 815);
 
     for (let i = 0; i < 4; i++) {
-        rouletteText[37 + i].text = val_OvalCenter[i];
-        rouletteText[37 + i].position.set(200, 390 + (120) * i);
+        rollateText[37 + i].text = val_OvalCenter[i];
+        rollateText[37 + i].position.set(200, 390 + (120) * i);
     }
 
 
 }
 
 function drawRectangle_Table() {
-    rouletteText[36].text = "0";
-    rouletteText[37].text = "2 - 1";
-    rouletteText[38].text = "2 - 1";
-    rouletteText[39].text = "2 - 1";
-    rouletteText[40].text = "1st - 12";
-    rouletteText[41].text = "2nd - 12";
-    rouletteText[42].text = "3rd - 12";
-    rouletteText[43].text = "1 - 18";
-    rouletteText[44].text = "EVEN";
-    rouletteText[47].text = "ODD";
-    rouletteText[48].text = "19 - 36";
+    rollateText[36].text = "0";
+    rollateText[37].text = "2 - 1";
+    rollateText[38].text = "2 - 1";
+    rollateText[39].text = "2 - 1";
+    rollateText[40].text = "1st - 12";
+    rollateText[41].text = "2nd - 12";
+    rollateText[42].text = "3rd - 12";
+    rollateText[43].text = "1 - 18";
+    rollateText[44].text = "EVEN";
+    rollateText[47].text = "ODD";
+    rollateText[48].text = "19 - 36";
     for (let i = 40; i < 49; i++) {
-        rouletteText[i].rotation = (Math.PI * .5);
+        rollateText[i].rotation = (Math.PI * .5);
     }
 
-    rouletteTable.clear();
+    rollateTable.clear();
 
-    rouletteTable.lineStyle(2, colorLine); //yellow
-    rouletteTable.beginFill(colorGreen);
-    rouletteTable.drawPolygon(polyPts);
-    rouletteTable.beginFill(colorRed);
-    rouletteTable.drawPolygon(polyRedDimond);
-    rouletteTable.beginFill(colorBlock);
-    rouletteTable.drawPolygon(polyBleckDimond);
+    rollateTable.lineStyle(2, colorLine); //yellow
+    rollateTable.beginFill(colorGreen);
+    rollateTable.drawPolygon(polyPts);
+    rollateTable.beginFill(colorRed);
+    rollateTable.drawPolygon(polyRedDimond);
+    rollateTable.beginFill(colorBlock);
+    rollateTable.drawPolygon(polyBleckDimond);
     for (let i = 0; i < 36; i++) {
         if ((i < 10 || (i > 18 && i < 28))) {
             if (i % 2 == 0) {
-                rouletteTable.beginFill(colorRed);
+                rollateTable.beginFill(colorRed);
             } else {
-                rouletteTable.beginFill(colorBlock);
+                rollateTable.beginFill(colorBlock);
             }
         } else {
             if (i % 2 != 0) {
-                rouletteTable.beginFill(colorRed);
+                rollateTable.beginFill(colorRed);
             } else {
-                rouletteTable.beginFill(colorBlock);
+                rollateTable.beginFill(colorBlock);
             }
 
         }
-        rouletteTable.drawRect(210 + 74 * (i % 3), 425 + 38 * Math.floor(i / 3), 74, 38);
-        rouletteText[i].position.set(210 + 74 * (i % 3) + 30, 8 + 425 + 38 * Math.floor(i / 3));
+        rollateTable.drawRect(210 + 74 * (i % 3), 425 + 38 * Math.floor(i / 3), 74, 38);
+        rollateText[i].position.set(210 + 74 * (i % 3) + 30, 8 + 425 + 38 * Math.floor(i / 3));
     }
-    rouletteTable.endFill();
-    rouletteText[36].position.set(310, 390);
+    rollateTable.endFill();
+    rollateText[36].position.set(310, 390);
     for (let i = 0; i < 3; i++) {
-        rouletteTable.drawRect(210 + 74 * i, 881, 74, 38);
-        rouletteText[37 + i].position.set(210 + 74 * i + 20, 881 + 6);
+        rollateTable.drawRect(210 + 74 * i, 881, 74, 38);
+        rollateText[37 + i].position.set(210 + 74 * i + 20, 881 + 6);
     }
     for (let i = 0; i < 3; i++) {
-        rouletteTable.drawRect(160, 425 + 152 * i, 50, 152);
-        rouletteText[40 + i].position.set(200, 460 + 152 * i);
+        rollateTable.drawRect(160, 425 + 152 * i, 50, 152);
+        rollateText[40 + i].position.set(200, 460 + 152 * i);
     }
     for (let i = 0; i < 6; i++) {
-        rouletteTable.drawRect(110, 425 + 76 * i, 50, 76);
+        rollateTable.drawRect(110, 425 + 76 * i, 50, 76);
         if (i != 2 && i != 3)
-            rouletteText[43 + i].position.set(150, 430 + 76 * i);
+            rollateText[43 + i].position.set(150, 430 + 76 * i);
     }
 
-    // rouletteTable.scale.set(2,2);
-    // rouletteTable.position.set(-100,-100)
+    // rollateTable.scale.set(2,2);
+    // rollateTable.position.set(-100,-100)
 }
 
 function loadRolletText(style_var, str) {
@@ -230,7 +230,7 @@ function loadRolletText(style_var, str) {
 }
 
 
-function setroulette(isvisible) {//set visiblity of bat button and coin
+function setRollate(isvisible) {//set visiblity of bat button and coin
     sprite_repeat.visible = isvisible;
     sprite_undo.visible = isvisible;
     coinArray.forEach(element => { element.visible = isvisible; });
@@ -250,7 +250,7 @@ function setroulette(isvisible) {//set visiblity of bat button and coin
         container.visible = true;
         drawRectangle_Table();
     }
-    for (let i = 0; i < rouletteNumber.length; i++) {
-        rouletteNumber[i].visible = true;
+    for (let i = 0; i < rollateNumber.length; i++) {
+        rollateNumber[i].visible = true;
     }
 }

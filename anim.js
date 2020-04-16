@@ -43,7 +43,7 @@ function setup() {
   sprite_undo = loadSprite(basepath + "undo.png", 112, 500, 610, 1);//create and add undo Sprite in app view with click event 112
   sprite_repeat = loadSprite(basepath + "repeat.png", 111, 500, 810, 1);//create and add repeat Sprite in app view with click event 111
   sprite_menu = loadSprite(basepath + "menu.png", 110, 500, 900, 1);//create and add menu Sprite in app view with click event 110
-  loadRoulette();
+  loadRollate();
   app.stage.addChild(trans_Background);//add background Sprite in app
   trans_Background.visible = false;
   // Require small coin for flying animation  
@@ -159,7 +159,7 @@ function onButtonClick(e){
     itsOval = e.target.myCustomProperty == 118;
     timeoutHandle = setTimeout(nextTurn, 1000);//set timeout function for game dynamicCounter
     sprite_poker.visible =  sprite_roullete_Oval.visible =  sprite_roullete.visible = false;
-    setRoulette(true);
+    setRollate(true);
     resetValue();
     APP_SCREEN = APP_ROULLETE;
     
@@ -277,11 +277,11 @@ function nextTurn() {
     }
   }else{
     if (dynamicCounter == 0) {//call when bet is closed
-      setRoulette(false);
+      setRollate(false);
     }
     if (dynamicCounter < -30) {//end of the game
       dynamicCounter = 15;//restart dynamicCounter
-      setRoulette(true);//call when bet is oped
+      setRollate(true);//call when bet is oped
       resetValue();
     }
   }
