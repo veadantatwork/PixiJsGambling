@@ -1,5 +1,5 @@
-var rollateText = []; //THis is used to display numbr and text on oval and rect table
-var rollateNumber = [];//this is use to show text on past numbr on top
+var rollateText = []; //THis is used to display numebr and text on oval and rect table
+var rollateNumber = [];//this is use to show text on past numer on top
 let rollateTable = new PIXI.Graphics();// this user to create graphics object for make roulette and oval table rect and polygone
 let container = new PIXI.Container();//container used for roullete table all object of table(oval /rect);
 let colorRed = 0xb71e04;
@@ -12,13 +12,13 @@ let val_Oval_Left = ["11", "36", "13", "27", " 6", "34", "17", "25", " 2", "21",
 let val_Oval_top = ["30", "8", "23", "10", " 5", "24"];//oval top number
 let val_Ovalbottom = ["32", " 0", "26", " 3", "35"];//oval bottom number
 let val_OvalCenter = ["TIER", "ORPH.", "VOISINS", "ZERO"];//oval center text
-let polyPts = [145, 125, 300, 100, 455, 125, 455, 155, 145, 155];//this point used to make polygon for zero in rect table
+let polyPts = [145, 125, 300, 100, 455, 125, 455, 155, 145, 155];//this poit used to make polygone for zero in rext table
 let rolletCoin = new Roulette();//all coin strip that used to place on table
 let blockNumber = [2, 4, 6, 8, 10, 11, 13, 15, 17, 19, 20, 22, 24, 26, 28, 29, 31, 33, 35];//this is used to find number those are black
 let newNumber;//this is used to show new roulette text 
 let newNumberColor = 0xff0000;//new number rect color
-let polyRedDimond = [45, 460,55, 430,65, 460,55, 490];//Red diamond poly point for rect table
-let polyBleckDimond = [45, 580, 55, 550, 65, 580, 55, 610];//Black diamond poly point for rect table
+let polyRedDimond = [45, 460,55, 430,65, 460,55, 490];//Red dimond poly point for rect table
+let polyBleckDimond = [45, 580, 55, 550, 65, 580, 55, 610];//Black dimond poly point for rect table
 //Bottom poly points for oval table
 let polyBottom = [
     [60, 800, 148, 800, 163, 824, 97, 872],
@@ -60,7 +60,7 @@ function loadRollate() {
         rollateNumber[i].text = Math.floor(Math.random() * 37) + "";
         rollateNumber[i].visible = false;
     }
-    //add child roulette text used to show new number on middle of roulette circle
+    //add child roulette text used to show new number on middile of roulette circle
     newNumber = loadRolletText({ fill: colorRed, fontSize: 36, fontWeight: "bold" }, (i + 1));
     app.stage.addChild(newNumber);
     newNumber.text = "" + Math.floor(Math.random() * 500) % 37;
@@ -105,7 +105,7 @@ function drawRoullete() {
     }
 }
 
-// set all number rect and polygon of oval table
+// set all number rect and polygone of oval table
 function draw_Oval_Table() {
     // reset all roulette number and text position and rotation 
     for (let i = 0; i < rollateText.length; i++) {
@@ -114,7 +114,7 @@ function draw_Oval_Table() {
     }
     rollateTable.clear();
 
-    //set border of all rect and polygon
+    //set border of all rect and polygone
     rollateTable.lineStyle(2, colorLine); //yellow
 
     //set fill color
@@ -272,7 +272,7 @@ function drawRectangle_Table() {
         rollateTable.drawRect(85, 155 + 240 * i, 60, 240);
         rollateText[40 + i].position.set(135, 225 + 240 * i);
     }
-    //set text for Left(EVEN,Odd diamond) of Roulette table
+    //set text for Left(EVEN,Odd dimond) of Roulette table
     for (let i = 0; i < 6; i++) {
         rollateTable.drawRect(25, 155 + 120 * i, 60, 120);
         if (i != 2 && i != 3)
@@ -284,6 +284,7 @@ function drawRectangle_Table() {
 
 //set visiblity of table releted object
 function setRollate(isvisible) {
+    sprite_menu.visible = APP_SCREEN != APP_MENU;
     //set visiblity of buttons
     sprite_repeat.visible = isvisible && dynamicCounter > 0;
     sprite_ovalselect.visible = !itsOval;
@@ -327,20 +328,21 @@ function setRollate(isvisible) {
 
 
 
-//Handle touch event for Rect Table
+//Handle tuch event for Rect Table
 function Handle_rectTuch(event) {
     var pints = []; //define points varible for selected point at the time of click
     var sendCoin = false;//if any number and text click the it become true
     var zeroclick = false;//if zero number  click the it become true
     var is12 = false;//if (1st,2nd,3rd)-12 number  click the it become true
     var isDimond = false;//if (odd, even,dimond,1-18,19-36) number  click the it become true
-
+    var type = [];
 
     //if zero number  click the it become true
     if (CircRectCollision(145, 115, 309, 40, event.data.global.x, event.data.global.y, 5)) {
         console.log(" ~Zero~~   ");
         sendCoin = true;
         zeroclick = true;
+        type.push("0");
     }
 
     //if - to 36 number  click the it become true
@@ -352,6 +354,7 @@ function Handle_rectTuch(event) {
             var point = [145 + 103 * (i % 3) + 103 * .5, 155 + 60 * Math.floor(i / 3) + 30];
             pints.push(point);
             sendCoin = true;
+            type.push(""+(i + 1));
         }
     }
 
@@ -363,6 +366,7 @@ function Handle_rectTuch(event) {
             var point = [145 + 103 * (i % 3) + 103 * .5, 896];
             pints.push(point);
             sendCoin = true;
+            type.push("2s"+i);
         }
     }
     for (let i = 0; i < 3; i++) {
@@ -376,6 +380,7 @@ function Handle_rectTuch(event) {
                 //set true if click in middile of numbers and 1st,2nd,3rd - 12
                 is12 = true;
             }
+            type.push((i+1)+"is12");
         }
     }
     for (let i = 0; i < 6; i++) {
@@ -386,7 +391,9 @@ function Handle_rectTuch(event) {
             if (pints.length == 0) {// getting point for set position of coin if not get point from number (1st,2nd,3rd - 12)
                 var point = [55, 155 + 120 * i + 60];
                 pints.push(point);
+                type.push((i+1)+"left");
             }
+            
         }
     }
     if (sendCoin == true) {
@@ -400,7 +407,7 @@ function Handle_rectTuch(event) {
                 point[0] -= 50;
             }
         }
-        rolletCoin.addRect(point[0], point[1]);//place coin in table rect and oval 
+        rolletCoin.addRect(type,point[0], point[1]);//place coin in table rect and oval 
     }
 }
 

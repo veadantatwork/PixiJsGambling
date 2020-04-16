@@ -10,24 +10,24 @@ class Roulette {
         // object for coin that place on table
         this.coinOval = [];
         this.coinRect = [];
+        this.roulette4undo = [];
     }
 
 
     //Add coin when click on oval Zero
     addZero() {
-        if (this.setBet(4)) {
+        if (this.setBet(["zero"],4)) {
             let ovalcontainer = new PIXI.Container();
-            ovalcontainer.addChild(loadRolletSprite(basepath + "6.png", 230, 800, 0.5));
-            var txt = loadRolletText({ fill: colorWhite, fontSize: 16, fontWeight: "bold" }, coinValue[selCoin] * 3);
-            txt.position.set(230 - txt.text.length * 4, 790);
-            ovalcontainer.addChild(txt);
-            ovalcontainer.addChild(loadRolletSprite(basepath + "" + selCoin + ".png", 230, 875, 0.5));
+            ovalcontainer.addChild(addCoin( 230, 800,coinValue[selCoin] * 3));
+            ovalcontainer.addChild(addCoin( 230, 875,coinValue[selCoin]));
             container.addChild(ovalcontainer);
+        
             this.coinOval.push(ovalcontainer);
 
             let zeroCOR = [[400, 155], [400, 395], [300, 664], [300, 820]];
             let rectcontaner = new PIXI.Container();
             for (let i = 0; i < zeroCOR.length; i++) {
+                
                 rectcontaner.addChild(loadRolletSprite(basepath + "" + selCoin + ".png", zeroCOR[i][0], zeroCOR[i][1], 0.5));
             }
             container.addChild(rectcontaner);
@@ -38,7 +38,7 @@ class Roulette {
 
     //Add coin when click on oval Voisins
     addVoisins() {
-        if (this.setBet(9)) {
+        if (this.setBet(["voisins"],9)) {
             let ovalcontainer = new PIXI.Container();
             ovalcontainer.addChild(loadRolletSprite(basepath + "6.png", 230, 660, 0.5));
             var txt = loadRolletText({ fill: colorWhite, fontSize: 16, fontWeight: "bold" }, coinValue[selCoin] * 9);
@@ -47,8 +47,6 @@ class Roulette {
 
             container.addChild(ovalcontainer);
             this.coinOval.push(ovalcontainer);
-
-
 
             let zeroCOR = [[356, 155], [190, 275], [400, 395], [400, 515], [190, 575], [245, 755], [300, 815]];
             let rectcontaner = new PIXI.Container();
@@ -65,17 +63,17 @@ class Roulette {
             this.coinRect.push(rectcontaner);
 
 
-            currentbat += coinValue[selCoin] * 9;//set coin current value
-            balance -= coinValue[selCoin] * 9;//update balance
-            txtBalance.text = "" + balance;
-            txtBat.text = "" + currentbat;
-            value4undo.push(coinValue[selCoin] * 9);
+            // currentbat += coinValue[selCoin] * 9;//set coin current value
+            // balance -= coinValue[selCoin] * 9;//update balance
+            // txtBalance.text = "" + balance;
+            // txtBat.text = "" + currentbat;
+            // value4undo.push(coinValue[selCoin] * 9);
             this.setVisible();
         }
     }
     //Add coin when click on oval ORPH
     addORPH() {
-        if (this.setBet(5)) {
+        if (this.setBet(["orph"],5)) {
             let ovalcontainer = new PIXI.Container();
             ovalcontainer.addChild(loadRolletSprite(basepath + "6.png", 230, 460, 0.5));
             var txt = loadRolletText({ fill: colorWhite, fontSize: 16, fontWeight: "bold" }, coinValue[selCoin] * 4);
@@ -97,17 +95,17 @@ class Roulette {
             this.coinRect.push(rectcontaner);
 
 
-            currentbat += coinValue[selCoin] * 5;//set coin current value
-            balance -= coinValue[selCoin] * 5;//update balance
-            txtBalance.text = "" + balance;
-            txtBat.text = "" + currentbat;
-            value4undo.push(coinValue[selCoin] * 5);
+            // currentbat += coinValue[selCoin] * 5;//set coin current value
+            // balance -= coinValue[selCoin] * 5;//update balance
+            // txtBalance.text = "" + balance;
+            // txtBat.text = "" + currentbat;
+            // value4undo.push(coinValue[selCoin] * 5);
             this.setVisible();
         }
     }
     //Add coin when click on oval TIER
     addTIER() {
-        if (this.setBet(6)) {
+        if (this.setBet(["tier"],6)) {
             let ovalcontainer = new PIXI.Container();
             ovalcontainer.addChild(loadRolletSprite(basepath + "6.png", 230, 300, 0.5));
             var txt = loadRolletText({ fill: colorWhite, fontSize: 16, fontWeight: "bold" }, coinValue[selCoin] * 6);
@@ -129,29 +127,32 @@ class Roulette {
             this.coinRect.push(rectcontaner);
 
 
-            currentbat += coinValue[selCoin] * 6;//set coin current value
-            balance -= coinValue[selCoin] * 6;//update balance
-            txtBalance.text = "" + balance;
-            txtBat.text = "" + currentbat;
-            value4undo.push(coinValue[selCoin] * 6);
+            // currentbat += coinValue[selCoin] * 6;//set coin current value
+            // balance -= coinValue[selCoin] * 6;//update balance
+            // txtBalance.text = "" + balance;
+            // txtBat.text = "" + currentbat;
+            // value4undo.push(coinValue[selCoin] * 6);
             this.setVisible();
         }
     }
 
     //Add coin when click on oval Single number
     addOvalSingle(ox, oy, num) {
-        if (this.setBet(1)) {
+        var total = this.setBet([""+num],1);
+        if (total) {
             let ovalcontainer = new PIXI.Container();
+            // ovalcontainer.addChild(addCoin( ox, oy,total));
             ovalcontainer.addChild(loadRolletSprite(basepath + "" + selCoin + ".png", ox, oy, 0.4));
             container.addChild(ovalcontainer);
             this.coinOval.push(ovalcontainer);
 
             num = Number(num) - 1;
             let rectcontaner = new PIXI.Container();
-            if (num > -1)
-                rectcontaner.addChild(loadRolletSprite(basepath + "" + selCoin + ".png", 145 + 103 * (num % 3) + 103 * .5, 155 + 60 * Math.floor(num / 3) + 30, 0.4));
-            else
-                rectcontaner.addChild(loadRolletSprite(basepath + "" + selCoin + ".png", 295, 125, 0.4));
+            if (num > -1){
+                rectcontaner.addChild(addCoin( 145 + 103 * (num % 3) + 103 * .5, 155 + 60 * Math.floor(num / 3) + 30,total));
+            }else{
+                rectcontaner.addChild(addCoin( 295, 125,total));
+            }
             container.addChild(rectcontaner);
             this.coinRect.push(rectcontaner);
 
@@ -162,16 +163,15 @@ class Roulette {
 
 
     //Add coin when click on Rect  table for number and combine number
-    addRect(x, y) {
-        if (this.setBet(1)) {
+    addRect(type,x, y) {
+        var total = this.setBet(type,1);
+        if (total) {
             let ovalcontainer = new PIXI.Container();
             container.addChild(ovalcontainer);
             this.coinOval.push(ovalcontainer);
 
             let rectcontaner = new PIXI.Container();
-
-            rectcontaner.addChild(loadRolletSprite(basepath + "" + selCoin + ".png", x, y, 0.4));
-
+            rectcontaner.addChild(addCoin( x, y,total));
             container.addChild(rectcontaner);
             this.coinRect.push(rectcontaner);
 
@@ -212,6 +212,14 @@ class Roulette {
             var sprite = this.coinRect.pop();
             container.removeChild(sprite);
         }
+
+        var bat = this.roulette4undo.pop();
+        currentbat -= bat.chip;
+        balance += bat.chip;
+        txtBalance.text = "" + balance;
+        txtBat.text = "" + currentbat;
+
+
         console.log(this.coinOval.length + "  remove~~Coins  " + this.coinRect.length);
     }
     //repeat coin at time click on repeat button
@@ -231,17 +239,21 @@ class Roulette {
         console.log(this.coinOval.length + "  remove~~Coins  " + this.coinRect.length);
     }
     // Set bet for table
-    setBet(val) {
+    setBet(type,val) {
         if (coinValue[selCoin] * val <= balance) {
             currentbat += coinValue[selCoin] * val;//set coin current value
             balance -= coinValue[selCoin] * val;//update balance
             txtBalance.text = "" + balance;
             txtBat.text = "" + currentbat;
-            value4undo.push(coinValue[selCoin] * val);
-            return true;
+            this.roulette4undo.push(new BatValuse(type,coinValue[selCoin] * val));
+            console.log("  <===   "+JSON.stringify(this.roulette4undo));
+            return getChipValueOn(type,this.roulette4undo);
         }
         txtWait4Next.myCustomProperty = 100;
         txtWait4Next.text = 'Balance too low ';
         return false;
     }
+    
+
+
 }

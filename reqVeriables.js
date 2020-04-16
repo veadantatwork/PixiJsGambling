@@ -10,7 +10,7 @@ var count = 100;//for flying animation count
 var goOut = 0;//for fluing animation horizontal movment
 var selCoin = 0;//selected coin 
 const posx = 500, posy = 710;//flying coin init position
-const speed = 5;//flying coin speed
+const speed = 10;//flying coin speed
 var coinArray = Array(6);// object small coin for flying animation  
 var coinArrayBig = Array(6);  // object big coin for flying animation  
 var spriteAnte, sprite_bonus,sprite_GlowAnte; // button for ANTE and bouns
@@ -61,4 +61,4 @@ var APP_SCREEN = 0;
 const APP_MENU = 0;
 const APP_POKER = 1;
 const APP_ROULLETE = 2;
-
+var mSidemenu;

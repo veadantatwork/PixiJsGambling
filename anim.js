@@ -7,7 +7,8 @@ var basepath = "./assets/";
 //Image string that uses in game 
 
 
-var imageArr = [basepath + "oval.png", basepath + "ovalselect.png",
+var imageArr = [basepath + "logout.png", basepath + "lobby.png", basepath + "history.png", basepath + "close.png",
+basepath + "oval.png", basepath + "ovalselect.png",
 basepath + "rollet.png", basepath + "poker.png", basepath + "rolletOval.png",
 basepath + "tableBonus.png", basepath + "tablePlay.png", basepath + "tableANTE.png", basepath + "opecity.png", basepath + "toolowbase.png",
 basepath + "menu.png", basepath + "repeat.png", basepath + "undo.png", basepath + "bonus.png", basepath + "anteglow.png", basepath + "ante.png", basepath + "0.png",
@@ -44,9 +45,9 @@ function setup() {
   tablePlay = loadSprite(basepath + "tablePlay.png", 114, 222, 460, 1);//create and add tablePlay Sprite in app view with click event 112
   tableANTE = loadSprite(basepath + "tableANTE.png", 115, 320, 460, 1);//create and add tableANTE Sprite in app view with click event 112
   tableBonus.visible = tablePlay.visible = tableANTE.visible = false;
-  sprite_undo = loadSprite(basepath + "undo.png", 112, 500, 610, 1);//create and add undo Sprite in app view with click event 112
+  sprite_undo = loadSprite(basepath + "undo.png", 112, 500, 630, 1);//create and add undo Sprite in app view with click event 112
   sprite_repeat = loadSprite(basepath + "repeat.png", 111, 500, 810, 1);//create and add repeat Sprite in app view with click event 111
-  sprite_menu = loadSprite(basepath + "menu.png", 110, 500, 900, 1);//create and add menu Sprite in app view with click event 110
+  sprite_menu = loadSprite(basepath + "menu.png", 110, 500, 560, 1);//create and add menu Sprite in app view with click event 110
 
   sprite_poker = loadSprite(basepath + "poker.png", 116, 280, 350, 1);//create and add poker Sprite in app view with click event 112
   sprite_roullete = loadSprite(basepath + "rollet.png", 117, 280, 500, 1);//create and add roullete Sprite in app view with click event 112
@@ -124,6 +125,7 @@ function setup() {
   txtBalance.visible = false;
   txtBat.visible = false;
   txtDydnamic.visible = false;
+  mSidemenu = new Menu();
 }
 
 //tuch event for roulette table
@@ -182,6 +184,14 @@ function loadText(style_var, str) {
   app.stage.addChild(text);
   return text;
 }
+function addCoin(x, y, val) {
+  var coinstrip = loadRolletSprite(basepath + "6.png", x, y, 0.5);
+  var txt = loadRolletText({ fill: colorWhite, fontSize: 40, fontWeight: "bold" }, val);
+  txt.position.set(-txt.text.length * 10, -25);
+  coinstrip.addChild(txt);
+  return coinstrip;
+}
+
 //callback function for onclick event
 
 
@@ -202,6 +212,7 @@ function onButtonClick(e) {
       setRollate(true);
       break;
     case 116: //Click Poker
+    APP_SCREEN = APP_POKER;
       timeoutHandle = setTimeout(nextTurn, 1000);//set timeout function for game dynamicCounter
       dynamicCounter = 15;//restart dynamicCounter
       setVisible(true);//call when bet is oped
@@ -209,10 +220,10 @@ function onButtonClick(e) {
       sprite_poker.visible = sprite_roullete.visible = sprite_roullete_Oval.visible = false;
       background.visible = true;
       tableBonus.visible = tablePlay.visible = tableANTE.visible = true;
-      APP_SCREEN = APP_POKER;
+      
       break;
     case 118: case 117: //Click Roullete
-      dynamicCounter = -1;//restart dynamicCounter
+      // dynamicCounter = -1;//restart dynamicCounter
       itsOval = e.target.myCustomProperty == 118;
       timeoutHandle = setTimeout(nextTurn, 1000);//set timeout function for game dynamicCounter
       sprite_poker.visible = sprite_roullete_Oval.visible = sprite_roullete.visible = false;
@@ -228,7 +239,9 @@ function onButtonClick(e) {
         txtWait4Next.text = "Wait for next game";
       }
       return;//click for menu button
-    case 110: return;//click for menu button
+    case 110: //click for menu button
+    mSidemenu.open();
+    return;
     case 111:
       if (APP_SCREEN == APP_ROULLETE) {
 
@@ -308,22 +321,22 @@ function play(delta) {
       coinAnim();// draw coin animation form coinAnim.js
       DrawDynamicRect();// draw Rect form dynamicRect.js
       drawCards();// draw Card from form dynamicRect.js
-
       break;
     case APP_ROULLETE:
       coinAnim();// draw coin animation form coinAnim.js
       DrawDynamicRect();// draw Rect form dynamicRect.js
       drawRoullete();//Draw Roulette animation
+      
       break;
   }
 
-
+  mSidemenu.drawMenu();
   allcounter++;
 }
 //set timeout function for game dynamicCounter
 function nextTurn() {
   clearTimeout(timeoutHandle);
-  console.log("dynamicCounter " + dynamicCounter);
+  // console.log("dynamicCounter " + dynamicCounter);
   dynamicCounter--;
   timeoutHandle = setTimeout(nextTurn, 1000);//reset timeout function for game dynamicCounter
 
@@ -368,6 +381,7 @@ function nextTurn() {
 
 }
 function setVisible(isvisible) {//set visiblity of bat button and coin
+  sprite_menu.visible = true;
   sprite_repeat.visible = isvisible;
   sprite_undo.visible = isvisible;
   coinArray.forEach(element => { element.visible = isvisible; });
@@ -384,6 +398,7 @@ function setVisible(isvisible) {//set visiblity of bat button and coin
   txtBalance.visible = true;
   txtBat.visible = true;
   txtDydnamic.visible = true;
+  
 }
 function resetValue() {//reset game valuse
   currentbat = 0;//reset bet of game
@@ -408,10 +423,6 @@ function resetValue() {//reset game valuse
   }
   while (value4undo.length) { value4undo.pop(); }//remove all bat from last game
   rolletCoin.removeCoins();//remove coin from roulette table
-  while (selSprite.length > 0) {
-    var sprite = selSprite.pop();
-    app.stage.removeChild(sprite);
-  }
 }
 function make_deck() {//asign card valus
   var i;
