@@ -61,3 +61,4 @@ var APP_SCREEN = 0;
 const APP_MENU = 0;
 const APP_POKER = 1;
 const APP_ROULLETE = 2;
+

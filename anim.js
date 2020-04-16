@@ -23,8 +23,8 @@ loader.add(imageArr).on("progress", loadProgressHandler).load(setup);
 
 //for loading progress
 function loadProgressHandler(loader, resource) {
-  // console.log("loading: " + resource.url);
-  // console.log("progress: " + loader.progress + "%");
+  console.log("loading: " + resource.url);
+  console.log("progress: " + loader.progress + "%");
 }
 
 // Call after load all resources 
@@ -51,11 +51,12 @@ function setup() {
   sprite_poker = loadSprite(basepath + "poker.png", 116, 280, 350, 1);//create and add poker Sprite in app view with click event 112
   sprite_roullete = loadSprite(basepath + "rollet.png", 117, 280, 500, 1);//create and add roullete Sprite in app view with click event 112
   sprite_roullete_Oval = loadSprite(basepath + "rolletOval.png", 118, 280, 650, 1);//create and add roullete Sprite in app view with click event 112
-  sprite_ovalselect = loadSprite(basepath + "oval.png", 119, 500, 810, 1);//create and add repeat Sprite in app view with click event 111
-  sprite_deselect = loadSprite(basepath + "ovalselect.png", 120, 500, 810, 1);//create and add repeat Sprite in app view with click event 111
+  sprite_ovalselect = loadSprite(basepath + "oval.png", 119, 500, 880, 1);//create and add repeat Sprite in app view with click event 111
+  sprite_deselect = loadSprite(basepath + "ovalselect.png", 120, 500, 880, 1);//create and add repeat Sprite in app view with click event 111
   sprite_ovalselect.visible = sprite_deselect.visible = false;
 
-  loadRollate();
+  loadRollate();//load roulette object
+
   app.stage.addChild(trans_Background);//add background Sprite in app
   trans_Background.visible = false;
   // Require small coin for flying animation  
@@ -106,8 +107,8 @@ function setup() {
   //Calling play recursive for rendering 
   state = play;
   app.ticker.add(delta => gameLoop(delta));
-  document.addEventListener('keydown', dealWithKeyboard);
-  app.renderer.plugins.interaction.on('pointerup', touchEvent);
+  // document.addEventListener('keydown', dealWithKeyboard);
+  app.renderer.plugins.interaction.on('pointerup', touchEvent);//add tuch event for roulette table
   setVisible(false);
 
 
@@ -118,21 +119,27 @@ function setup() {
   // setRollate(true);
   // resetValue();
   // APP_SCREEN = APP_ROULLETE;
-
+  txtbottomLeft.visible = false;
+  txtbottomRight.visible = false;
+  txtBalance.visible = false;
+  txtBat.visible = false;
+  txtDydnamic.visible = false;
 }
 
+//tuch event for roulette table
 function touchEvent(event) {
-  if (dynamicCounter > 0) {
+
+  if (dynamicCounter > 0 && APP_SCREEN == APP_ROULLETE) {//Handle event at bet is on
     if (itsOval == true) {
-      Handle_OvalTuch(event);
+      Handle_OvalTuch(event);//Handle event for Oval table
     } else {
-      Handle_rectTuch(event);
+      Handle_rectTuch(event);//Handle event for rect table
     }
+    txtWait4Next.position.set(event.data.global.x, event.data.global.y - 50);
   }
 
 }
-
-
+//Game rendring in loop
 function gameLoop(delta) { state(delta); }
 
 //load strip comman function
@@ -154,6 +161,7 @@ function loadSprite(str, tag, x, y, s) {
   sprite.vx = Math.sin((tag) * 36 * (Math.PI / 180)) * speed;
   sprite.vy = Math.cos((tag) * 36 * (Math.PI / 180)) * speed;
   app.stage.addChild(sprite);
+  sprite.visible = false;
   return sprite;
 }
 
@@ -170,6 +178,7 @@ function loadSprite_2(str, x, y, s) {
 
 function loadText(style_var, str) {
   var text = new PIXI.Text(str || '629.63 ', new PIXI.TextStyle(style_var));
+  text.visible = false;
   app.stage.addChild(text);
   return text;
 }
@@ -220,7 +229,13 @@ function onButtonClick(e) {
       }
       return;//click for menu button
     case 110: return;//click for menu button
-    case 111: sendCoinonTable(500, 810, 320, 458); return;//click for reapeat button
+    case 111:
+      if (APP_SCREEN == APP_ROULLETE) {
+
+      } else {
+        sendCoinonTable(500, 810, 320, 458);
+      }
+      return;//click for reapeat button
     case 112: undoValuse();
       return;//click for undo button
     case 101://click for bonus button
@@ -298,7 +313,7 @@ function play(delta) {
     case APP_ROULLETE:
       coinAnim();// draw coin animation form coinAnim.js
       DrawDynamicRect();// draw Rect form dynamicRect.js
-      drawRoullete();
+      drawRoullete();//Draw Roulette animation
       break;
   }
 
@@ -308,12 +323,11 @@ function play(delta) {
 //set timeout function for game dynamicCounter
 function nextTurn() {
   clearTimeout(timeoutHandle);
-  // console.log("dynamicCounter " + dynamicCounter);
+  console.log("dynamicCounter " + dynamicCounter);
   dynamicCounter--;
   timeoutHandle = setTimeout(nextTurn, 1000);//reset timeout function for game dynamicCounter
 
-
-  if (APP_SCREEN == APP_POKER) {
+  if (APP_SCREEN == APP_POKER) {//set timer for poker
     if (dynamicCounter == 0) {//call when bet is closed
       setVisible(false);
     }
@@ -322,14 +336,33 @@ function nextTurn() {
       setVisible(true);//call when bet is oped
       resetValue();
     }
-  } else {
+  } else {//set timer for Roulette
     if (dynamicCounter == 0) {//call when bet is closed
       setRollate(false);
+      newNumber.text = "" + Math.floor(Math.random() * 1000) % 37;
+      newNumberColor = 0xff0000;
+      blockNumber.forEach(element => {
+        if (element == newNumber.text) {
+          newNumberColor = 0x000000;
+        }
+      });
     }
     if (dynamicCounter < -30) {//end of the game
       dynamicCounter = 15;//restart dynamicCounter
       setRollate(true);//call when bet is oped
       resetValue();
+      {
+        for (let i = rollateNumber.length - 1; i > 0; i--) {
+          rollateNumber[i].text = rollateNumber[i - 1].text;
+          rollateNumber[i].style.fill = rollateNumber[i - 1].style.fill;
+        }
+        rollateNumber[0].text = newNumber.text;
+        rollateNumber[0].style.fill = newNumberColor == 0xff0000 ? newNumberColor : 0xffffff;
+        newNumber.visible = false;
+      }
+
+
+
     }
   }
 
@@ -346,6 +379,11 @@ function setVisible(isvisible) {//set visiblity of bat button and coin
   sprite_GlowAnte.visible = isvisible;
   trans_Background.visible = false;
 
+  txtbottomLeft.visible = true;
+  txtbottomRight.visible = true;
+  txtBalance.visible = true;
+  txtBat.visible = true;
+  txtDydnamic.visible = true;
 }
 function resetValue() {//reset game valuse
   currentbat = 0;//reset bet of game
@@ -369,7 +407,11 @@ function resetValue() {//reset game valuse
     txt_4_card[i].visible = false;//false visible text for card like "player","dealer","High card" in app view
   }
   while (value4undo.length) { value4undo.pop(); }//remove all bat from last game
-  rolletCoin.removeCoins();
+  rolletCoin.removeCoins();//remove coin from roulette table
+  while (selSprite.length > 0) {
+    var sprite = selSprite.pop();
+    app.stage.removeChild(sprite);
+  }
 }
 function make_deck() {//asign card valus
   var i;
@@ -419,14 +461,10 @@ function resize() {
     app.view.style.top = (window.innerWidth - (alto / 2)) + 'px';
   }
 }
-
-
-
 window.onresize = function (event) {
   console.log("ancho,alto");
   resize();
 };
-
 function toggleFullScreen() {
   if (!document.fullscreenElement) {
     // document.documentElement.requestFullscreen();

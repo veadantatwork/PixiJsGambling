@@ -24,13 +24,13 @@ function coinAnim() {
     //for coin movment from bonus/ANTE to table
     for (var i = 0; i < selSprite.length; i++) {
         if ((selSprite[i].ey > selSprite[i].y && selSprite[i].vy < 0) || (selSprite[i].ey < selSprite[i].y && selSprite[i].vy > 0)) {
-            if (selSprite[i].myCustomProperty > 0) {
-                selSprite[i].myCustomProperty--;
-                if (selSprite[i].myCustomProperty == 0) {
-                    app.stage.removeChild(selSprite[i]);
-                    selSprite.splice(i, 1);
-                }
-            }
+            // if (selSprite[i].myCustomProperty > 0) {
+            //     selSprite[i].myCustomProperty--;
+            //     if (selSprite[i].myCustomProperty == 0) {
+            //         app.stage.removeChild(selSprite[i]);
+            //         selSprite.splice(i, 1);
+            //     }
+           // }
         } else {
             selSprite[i].y += selSprite[i].vy;
             selSprite[i].x += selSprite[i].vx;
@@ -122,12 +122,15 @@ var getAngle = function (currX, currY, endX, endY) {
 function undoValuse() {
     if (value4undo.length > 0) {
         var bat = value4undo.pop();
-
         currentbat -= bat;
         balance += bat;
-
         txtBalance.text = "" + balance;
         txtBat.text = "" + currentbat;
+
+        if(APP_SCREEN == APP_ROULLETE){
+            rolletCoin.undoCoins();
+        }
         console.log(currentbat + "  balance = " + balance);
     }
+    
 }
