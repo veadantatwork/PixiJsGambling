@@ -3,7 +3,7 @@ let app = new Application({ width: 540, height: 1024, antialiasing: true, transp
 var element = document.getElementById("anim");
 element.appendChild(app.view);
 
-var imageArr = ["assets/bonus.png", "assets/ante.png", "assets/0.png", "assets/1.png", "assets/2.png", "assets/3.png", "assets/4.png", "assets/5.png", "assets/background.jpeg"];
+var imageArr = ["assets/bonus.png","assets/anteglow.png", "assets/ante.png", "assets/repeat.png", "assets/undo.png", "assets/0.png", "assets/1.png", "assets/2.png", "assets/3.png", "assets/4.png", "assets/5.png", "assets/background.jpeg"];
 for (var i = 2; i < 15; i++) {
   imageArr.push("assets/cards/C" + i + ".png");//club card load
   imageArr.push("assets/cards/D" + i + ".png");//Dimond card load
@@ -21,9 +21,10 @@ function loadProgressHandler(loader, resource) {
 
 // Call after load all resources 
 function setup() {
+
   background = new Sprite(resources["assets/background.jpeg"].texture);
   app.stage.addChild(background);
-
+  app.stage.addChild(graphics);
   // Require small coin for flying animation  
   for (let i = 0; i < coinArray.length; i++) {
     coinArray[i] = loadSprite("assets/" + i + ".png", i, posx, posy, 1);
@@ -35,30 +36,34 @@ function setup() {
     coinArrayBig[i].visible = i == 0;
   }
   
-
+  sprite_GlowAnte = loadSprite("assets/anteglow.png", -1, 270, 840, 1);
+  sprite_GlowAnte.vx =1;
+  sprite_GlowAnte.vy =.01;
   // Require to load for ANTE button
   spriteAnte = loadSprite("assets/ante.png", 100, 270, 840, 1);
 
   // Require to load for Bonus button
   sprite_bonus = loadSprite("assets/bonus.png", 101, 170, 688, 1);
 
+  //create and add "sprite_repeat" in-app view with click event 111 in function setup()
+  sprite_repeat=loadSprite("assets/repeat.png", 111, 500, 810, 1);
 
-  graphics.beginFill(0xFF0000);
-  graphics.drawRect(0, 25, app.screen.width, 30);
-  app.stage.addChild(graphics);
+  //create and add "sprite_undo" in-app view with click event 112 in function setup()
+  sprite_undo=loadSprite("assets/repeat.png", 112, 500, 610, 1);
 
-  style = new PIXI.TextStyle({ fill: "#9e9b4d", fontSize: 20, fontWeight: "bold" });
 
-  txtBalance = new PIXI.Text('629.63 ', style);
-  app.stage.addChild(txtBalance);
+  txtBalance = loadText({ fill: "#9e9b4d", fontSize: 20, fontWeight: "bold" });
+  txtBat = loadText({ fill: "#9e9b4d", fontSize: 20, fontWeight: "bold" });
+  txtDydnamic = loadText({ fill: "#fafafa", fontSize: 25, fontWeight: "normal" });
 
-  txtBat = new PIXI.Text('250', style);
-  app.stage.addChild(txtBat);
-
-  style = new PIXI.TextStyle({ fill: "#fafafa", fontSize: 25, fontWeight: "normal" });
-  txtDydnamic = new PIXI.Text('250 ', style);
-  app.stage.addChild(txtDydnamic);
-
+  for(var i=0;i<4;i++){
+    txt_4_card.push(loadText({ fill: "#fafafa", fontSize: 15, fontWeight: "normal" }));
+    txt_4_card[i].visible = false;
+  }
+  
+  
+  
+  
   resetValue();
   timeoutHandle = setTimeout(nextTurn, 1000);
 
@@ -102,7 +107,11 @@ function loadSprite_2(str,x,y, s) {
   return sprite;
 }
 
-
+function loadText(style_var){
+  var text = new PIXI.Text('629.63 ', new PIXI.TextStyle(style_var));
+  app.stage.addChild(text);
+  return text;
+}
 
 
 //callback function for onclick event
@@ -119,6 +128,14 @@ function onButtonClick(e) {
       sendCoinonTable(270, 840, 320, 458);
       selBigSprite.push(loadSprite("assets/" + selCoin + ".png", -1, 270, 840, 1.5));
       return;
+      //add case in onButtonClick function and add funtionality for repeat button click
+    case 111: sendCoinonTable(500, 810, 320, 458);
+    return;
+      //add case in onButtonClick function and add funtionality for repeat button click
+    case 112:
+      undoValuse();
+      return;
+
     default:
       // click for all coinArrayBig & coinArray coin
       if (coinArray[2].x > posx - 10) { //coin flying open animation start
@@ -151,16 +168,30 @@ function onButtonClick(e) {
   }
 }
 
+function undoValuse() {
+  if (value4undo.length > 0) {
+    var bat = value4undo.pop();
+
+    currentbat -= bat;
+    balance += bat;
+
+    txtBalance.text = "" + balance;
+    txtBat.text = "" + currentbat;
+    console.log(currentbat + " balance = " + balance);
+  }
+}
+
 // recursive callback function  for rendring
 function play(delta) {
   coinAnim();
   DrawDynamicRect();
+  // drawCards();
   allcounter++;
 }
 
 function nextTurn() {
   clearTimeout(timeoutHandle);
-  // console.log("dynamicCounter " + dynamicCounter);
+  console.log("dynamicCounter " + dynamicCounter);
   dynamicCounter--;
   timeoutHandle = setTimeout(nextTurn, 1000);
   if (dynamicCounter == 0) {
@@ -182,7 +213,7 @@ function setVisible(isvisible) {
   });
   spriteAnte.visible = isvisible;
   sprite_bonus.visible = isvisible;
-
+  sprite_GlowAnte.visible = isvisible;
 }
 function resetValue() {
   currentbat = 0;
@@ -201,6 +232,9 @@ function resetValue() {
   mSprit_Cards.length = 0;
   for(var i=0;i<10;i++){
     mSprit_Cards.push(loadSprite_2("assets/cards/"+cards[i]+".png",100+i*34,600,.25));
+  }
+  for(var i=0;i<txt_4_card.length;i++){
+    txt_4_card[i].visible = false;
   }
 
 }

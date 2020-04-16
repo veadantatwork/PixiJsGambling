@@ -38,12 +38,23 @@ function coinAnim() {
         }
     }
 
+    if (dynamicCounter > 0) {
+        sprite_GlowAnte.scale.set(sprite_GlowAnte.vx, sprite_GlowAnte.vx);
+        if (sprite_GlowAnte.vx > 1.2) {
+            sprite_GlowAnte.vy = -.01;
+        }
+        if (sprite_GlowAnte.vx < 1.0) {
+            sprite_GlowAnte.vy = 0.01;
+        }
+        sprite_GlowAnte.vx += sprite_GlowAnte.vy;
+    }
+
 }
 
 //Common function for movment coin from one place to other
 function sendCoinonTable(stratx, starty, endx, endy) {
-    console.log(selCoin+"   "+coinValue[selCoin] +" ++ "+ balance);
-    if(coinValue[selCoin] > balance){
+    console.log(selCoin + "   " + coinValue[selCoin] + " ++ " + balance);
+    if (coinValue[selCoin] > balance) {
         alert("You don't have enough coins");
         return;
     }
@@ -60,18 +71,18 @@ function sendCoinonTable(stratx, starty, endx, endy) {
     sprite.anchor.y = 0.5;
 
     //Get direction update vlaue
-    sprite.vx = Math.sin(thita * (Math.PI / 180)) * speed * 2; 
+    sprite.vx = Math.sin(thita * (Math.PI / 180)) * speed * 2;
     sprite.vy = -Math.cos(thita * (Math.PI / 180)) * speed * 2;
     sprite.myCustomProperty = 100;
     console.log(thita.toFixed(2) + " " + sprite.vx.toFixed(2) + "  ~~~~~~~~~~  " + sprite.vy.toFixed(2));
 
     app.stage.addChild(sprite);
     selSprite.push(sprite);
-    
+
     currentbat += coinValue[selCoin];//set coin current value
     balance -= coinValue[selCoin];//update balance
-    txtBalance.text = ""+balance;
-    txtBat.text = ""+currentbat;
+    txtBalance.text = "" + balance;
+    txtBat.text = "" + currentbat;
 
 
 }
