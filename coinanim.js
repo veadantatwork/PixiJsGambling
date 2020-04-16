@@ -1,4 +1,4 @@
-const coinValue = [2.5, 5, 25, 125, 500, 2500];
+const coinValue = [2.5, 5, 25, 125, 500, 2500];//coins valuse that uses for bat values
 
 function coinAnim() {
     if (count < (110 / speed)) {//For flying animation counts
@@ -83,7 +83,7 @@ function sendCoinonTable(stratx, starty, endx, endy) {
     balance -= coinValue[selCoin];//update balance
     txtBalance.text = "" + balance;
     txtBat.text = "" + currentbat;
-
+    value4undo.push(coinValue[selCoin]);
 
 }
 
@@ -100,3 +100,15 @@ var getAngle = function (currX, currY, endX, endY) {
     return angle;
 };
 
+function undoValuse() {
+    if (value4undo.length > 0) {
+        var bat = value4undo.pop();
+        
+        currentbat -= bat;
+        balance += bat;
+
+        txtBalance.text = "" + balance;
+        txtBat.text = "" + currentbat;
+        console.log(currentbat + "  balance = " + balance);
+    }
+}

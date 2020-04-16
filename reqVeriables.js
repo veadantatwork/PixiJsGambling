@@ -22,7 +22,7 @@ var txt_4_card = [];
 var dynamicCounter = 15;
 
 var currentbat = 0;
-var balance = 1000;
+var balance = 9999999;
 
 var allcounter = 0;
 
@@ -32,8 +32,23 @@ var graphics = new PIXI.Graphics();
 
 var cards = new Array(52);
 var mSprit_Cards = [];
+var board = new Array(5);
+var my_players = [
+  new player("Player", "", "",),
+  new player("Dealer", "", "",)
+ ];
 
-var sprite_repeat,sprite_undo; // button for undo and repeat
-var value4undo = [];//valuse store that we bat
+ function player (name, carda, cardb) {
+  this.name = name;
+  this.bankroll = 1000;
+  this.carda = carda;
+  this.cardb = cardb;
+  this.status = true;
+  this.total_bet = 0;
+  this.subtotal_bet = 0;
+}
 
-//"assets/repeat.png"
+var sprite_menu, sprite_repeat,sprite_undo; // button for menu, undo and repeat
+var value4undo = [];
+var txtbottomLeft;//varible for showing balance text
+var txtbottomRight;//varible for showing balance text
