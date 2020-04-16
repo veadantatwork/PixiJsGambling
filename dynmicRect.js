@@ -18,7 +18,7 @@ function DrawDynamicRect() {
         txtDydnamic.text = "......BETS CLOSED......";
     } else {//For "WAIT FOR NEXT GAME with gray color and increase time from nextTurn() dynamicCounter make mode negetive for more time //anim.js line 167
         graphics.beginFill(0x999999); //grey
-        txtDydnamic.text = "WAIT FOR NEXT GAME";
+        txtDydnamic.text = isBatAccepted;// "WAIT FOR NEXT GAME";
     }
     graphics.drawRect(0, 25, app.screen.width, 30);
         // graphics.beginFill(0x13463d); //dark green

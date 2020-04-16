@@ -421,8 +421,13 @@ function resetValue() {//reset game valuse
   for (var i = 0; i < txt_4_card.length; i++) {
     txt_4_card[i].visible = false;//false visible text for card like "player","dealer","High card" in app view
   }
+  while(selSprite.length > 0){
+    var sprite = selSprite.pop();
+    app.stage.removeChild(sprite);
+  }
   while (value4undo.length) { value4undo.pop(); }//remove all bat from last game
   rolletCoin.removeCoins();//remove coin from roulette table
+  isBatAccepted = "WAIT FOR NEXT GAME";
 }
 function make_deck() {//asign card valus
   var i;

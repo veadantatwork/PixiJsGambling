@@ -24,13 +24,13 @@ function coinAnim() {
     //for coin movment from bonus/ANTE to table
     for (var i = 0; i < selSprite.length; i++) {
         if ((selSprite[i].ey > selSprite[i].y && selSprite[i].vy < 0) || (selSprite[i].ey < selSprite[i].y && selSprite[i].vy > 0)) {
-            if (selSprite[i].myCustomProperty > 0) {
-                selSprite[i].myCustomProperty--;
-                if (selSprite[i].myCustomProperty == 0) {
-                    app.stage.removeChild(selSprite[i]);
-                    selSprite.splice(i, 1);
-                }
-            }
+            // if (selSprite[i].myCustomProperty > 0) {
+            //     selSprite[i].myCustomProperty--;
+            //     if (selSprite[i].myCustomProperty == 0) {
+            //         app.stage.removeChild(selSprite[i]);
+            //         selSprite.splice(i, 1);
+            //     }
+            // }
         } else {
             selSprite[i].y += selSprite[i].vy;
             selSprite[i].x += selSprite[i].vx;
@@ -78,7 +78,7 @@ function sendCoinonTable(stratx, starty, endx, endy) {
         return;
     }
 
-
+    isBatAccepted = "BETS ACCEPTED";
     var thita = getAngle(stratx, starty, endx, endy);//Get direction angle
 
     let sprite = new Sprite(resources[basepath + selCoin + ".png"].texture);
@@ -120,9 +120,6 @@ var getAngle = function (currX, currY, endX, endY) {
 };
 
 function undoValuse() {
-
-
-
     if (APP_SCREEN == APP_ROULLETE) {
         rolletCoin.undoCoins();
     } else {
@@ -132,6 +129,10 @@ function undoValuse() {
             balance += bat;
             txtBalance.text = "" + balance;
             txtBat.text = "" + currentbat;
+            if(selSprite.length > 0){
+                var sprite = selSprite.pop();
+                app.stage.removeChild(sprite);
+              }
         }
     }
 
