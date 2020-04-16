@@ -6,7 +6,8 @@ var basepath = "./assets/";
 //Image string that uses in game 
 
 
-var imageArr = [basepath + "tableBonus.png", basepath + "tablePlay.png", basepath + "tableANTE.png", basepath + "opecity.png", basepath + "toolowbase.png",
+var imageArr = [basepath + "rollet.png",basepath + "poker.png",basepath + "rolletOval.png",
+  basepath + "tableBonus.png", basepath + "tablePlay.png", basepath + "tableANTE.png", basepath + "opecity.png", basepath + "toolowbase.png",
 basepath + "menu.png", basepath + "repeat.png", basepath + "undo.png", basepath + "bonus.png", basepath + "anteglow.png", basepath + "ante.png", basepath + "0.png", basepath + "1.png", basepath + "2.png", basepath + "3.png", basepath + "4.png", basepath + "5.png", basepath + "background.jpeg"];
 for (var i = 2; i < 15; i++) {
   imageArr.push(basepath + "cards/C" + i + ".png");//club card load
@@ -32,23 +33,29 @@ function setup() {
   trans_Background = new Sprite(resources[basepath + "opecity.png"].texture);//create background Sprite
   app.stage.addChild(graphics);//add graphics in app view for drowing Rectangles
 
-
+  sprite_poker = loadSprite(basepath + "poker.png"    , 116, 280, 350, 1);//create and add poker Sprite in app view with click event 112
+  sprite_roullete= loadSprite(basepath + "rollet.png" , 117, 280, 500, 1);//create and add roullete Sprite in app view with click event 112
+  sprite_roullete_Oval= loadSprite(basepath + "rolletOval.png" , 118, 280, 650, 1);//create and add roullete Sprite in app view with click event 112
   tableBonus = loadSprite(basepath + "tableBonus.png" , 113, 130, 435, 1);//create and add tableBonus Sprite in app view with click event 112
   tablePlay = loadSprite(basepath + "tablePlay.png"   , 114, 222, 460, 1);//create and add tablePlay Sprite in app view with click event 112
   tableANTE = loadSprite(basepath + "tableANTE.png"   , 115, 320, 460, 1);//create and add tableANTE Sprite in app view with click event 112
-
+  tableBonus.visible = tablePlay.visible = tableANTE.visible = false;
   sprite_undo = loadSprite(basepath + "undo.png", 112, 500, 610, 1);//create and add undo Sprite in app view with click event 112
   sprite_repeat = loadSprite(basepath + "repeat.png", 111, 500, 810, 1);//create and add repeat Sprite in app view with click event 111
   sprite_menu = loadSprite(basepath + "menu.png", 110, 500, 900, 1);//create and add menu Sprite in app view with click event 110
+  loadRoulette();
   app.stage.addChild(trans_Background);//add background Sprite in app
   trans_Background.visible = false;
   // Require small coin for flying animation  
+
+  
+
   for (let i = 0; i < coinArray.length; i++) {
-    coinArray[i] = loadSprite(basepath + "" + i + ".png", i, posx, posy, 1);//create and add coinArray Sprite in app view with click event i(0 to 5)
+    coinArray[i] = loadSprite(basepath + "" + i + ".png", i, posx, posy, .5);//create and add coinArray Sprite in app view with click event i(0 to 5)
   }
   // Require big coin for flying animation  
   for (let i = 0; i < coinArrayBig.length; i++) {
-    coinArrayBig[i] = loadSprite(basepath + "" + i + ".png", i + 6, posx, posy, 1.5);//create and add coinArrayBig Sprite in app view with click event i + 6(6 to 11)
+    coinArrayBig[i] = loadSprite(basepath + "" + i + ".png", i + 6, posx, posy, 0.55);//create and add coinArrayBig Sprite in app view with click event i + 6(6 to 11)
     coinArrayBig[i].visible = selCoin == 0;//set visible big coin 
   }
   console.log("Boolean(10 > 9)" + Math.random());
@@ -75,17 +82,20 @@ function setup() {
   txtWait4Next.position.set(400, 700);
   txtWait4Next.text = 'Balance too low';
   txtWait4Next.myCustomProperty = 1;
-
+  txtWait4Next.visible = false;
   for (var i = 0; i < 4; i++) {
     txt_4_card.push(loadText({ fill: "#fafafa", fontSize: 15, fontWeight: "normal" }));//create and add text for card like "player","dealer","High card" in app view
     txt_4_card[i].visible = false;
   }
+  
   setVisible(true);//set visiblity of coins and button
   resetValue();//call function for reset app related values
-  timeoutHandle = setTimeout(nextTurn, 1000);//set timeout function for game dynamicCounter
+  // timeoutHandle = setTimeout(nextTurn, 1000);//set timeout function for game dynamicCounter
   //Calling play recursive for rendering 
   state = play;
   app.ticker.add(delta => gameLoop(delta));
+  document.addEventListener('keydown', dealWithKeyboard);
+  setVisible(false);
 }
 
 function gameLoop(delta) { state(delta); }
@@ -123,18 +133,37 @@ function loadSprite_2(str, x, y, s) {
   return sprite;
 }
 
-function loadText(style_var) {
-  var text = new PIXI.Text('629.63 ', new PIXI.TextStyle(style_var));
+function loadText(style_var,str) {
+  var text = new PIXI.Text(str || '629.63 ', new PIXI.TextStyle(style_var));
   app.stage.addChild(text);
   return text;
 }
 //callback function for onclick event
-function onButtonClick(e) {
+
+
+function onButtonClick(e){
   console.log("e.target.myCustomProperty = " + e.target.myCustomProperty);
   if (goOut != 0) {
     return;
   }
   switch (e.target.myCustomProperty) {
+    case 116: //Click Poker
+    timeoutHandle = setTimeout(nextTurn, 1000);//set timeout function for game dynamicCounter
+    dynamicCounter = 15;//restart dynamicCounter
+    setVisible(true);//call when bet is oped
+    resetValue();
+    sprite_poker.visible =  sprite_roullete.visible =  sprite_roullete_Oval.visible = false;
+    APP_SCREEN = APP_POKER;
+    break;
+    case 118: case 117: //Click Roullete
+    itsOval = e.target.myCustomProperty == 118;
+    timeoutHandle = setTimeout(nextTurn, 1000);//set timeout function for game dynamicCounter
+    sprite_poker.visible =  sprite_roullete_Oval.visible =  sprite_roullete.visible = false;
+    setRoulette(true);
+    resetValue();
+    APP_SCREEN = APP_ROULLETE;
+    
+    break;
     case 113:case 114:case 115: 
     if(dynamicCounter<0)
     {
@@ -163,7 +192,7 @@ function onButtonClick(e) {
         txtWait4Next.text = 'Balance too low';
       } else {
         sendCoinonTable(270, 840, 320, 458);
-        selBigSprite.push(loadSprite(basepath + "" + selCoin + ".png", -1, 270, 840, 1.5));
+        selBigSprite.push(loadSprite(basepath + "" + selCoin + ".png", -1, 270, 840, 0.6));
       }
 
       return;
@@ -206,12 +235,28 @@ function onButtonClick(e) {
       return;
   }
 }
+
 // recursive callback function  for rendring
 function play(delta) {
-  coinAnim();// draw coin animation form coinAnim.js
-  DrawDynamicRect();// draw Rect form dynamicRect.js
-  drawCards();// draw Card from form dynamicRect.js
-  allcounter++;
+
+  switch (APP_SCREEN) {
+    case APP_MENU:
+      break;
+    case APP_POKER:
+        coinAnim();// draw coin animation form coinAnim.js
+        DrawDynamicRect();// draw Rect form dynamicRect.js
+        drawCards();// draw Card from form dynamicRect.js
+        
+      break;
+    case APP_ROULLETE:
+      coinAnim();// draw coin animation form coinAnim.js
+      DrawDynamicRect();// draw Rect form dynamicRect.js
+      drawRoullete();
+      break;
+  }
+
+ 
+   allcounter++;
 }
 //set timeout function for game dynamicCounter
 function nextTurn() {
@@ -219,13 +264,26 @@ function nextTurn() {
   // console.log("dynamicCounter " + dynamicCounter);
   dynamicCounter--;
   timeoutHandle = setTimeout(nextTurn, 1000);//reset timeout function for game dynamicCounter
-  if (dynamicCounter == 0) {//call when bet is closed
-    setVisible(false);
-  }
-  if (dynamicCounter < -30) {//end of the game
-    dynamicCounter = 15;//restart dynamicCounter
-    setVisible(true);//call when bet is oped
-    resetValue();
+
+
+  if(APP_SCREEN == APP_POKER){
+    if (dynamicCounter == 0) {//call when bet is closed
+      setVisible(false);
+    }
+    if (dynamicCounter < -30) {//end of the game
+      dynamicCounter = 15;//restart dynamicCounter
+      setVisible(true);//call when bet is oped
+      resetValue();
+    }
+  }else{
+    if (dynamicCounter == 0) {//call when bet is closed
+      setRoulette(false);
+    }
+    if (dynamicCounter < -30) {//end of the game
+      dynamicCounter = 15;//restart dynamicCounter
+      setRoulette(true);//call when bet is oped
+      resetValue();
+    }
   }
 
 }
@@ -240,6 +298,7 @@ function setVisible(isvisible) {//set visiblity of bat button and coin
   sprite_bonus.visible = isvisible;
   sprite_GlowAnte.visible = isvisible;
   trans_Background.visible = false;
+  
 }
 function resetValue() {//reset game valuse
   currentbat = 0;//reset bet of game
@@ -307,6 +366,9 @@ function resize() {
     app.view.style.top = (window.innerWidth - (alto / 2)) + 'px';
   }
 }
+
+
+
 window.onresize = function (event) {
   console.log("ancho,alto");
   resize();
@@ -314,7 +376,7 @@ window.onresize = function (event) {
 
 function toggleFullScreen() {
   if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen();
+    // document.documentElement.requestFullscreen();
 
   }
 }

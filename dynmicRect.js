@@ -7,7 +7,7 @@ function DrawDynamicRect() {
         else
             graphics.beginFill(0x00bb00); //green
         txtDydnamic.text = "PLACE YOUR BETS " + dynamicCounter;
-    } else if (dynamicCounter > 0) {//this is for place order with orange color
+    } else if (dynamicCounter > 0) {//this is for plase order with orange color
         if (allcounter % 20 > 10)
             graphics.beginFill(0xff6000); //orange
         else
@@ -23,8 +23,6 @@ function DrawDynamicRect() {
     graphics.drawRect(0, 25, app.screen.width, 30);
     graphics.beginFill(0x13463d); //dark green
     graphics.drawRect(0, 525, app.screen.width, 500);
-
-   
     
 }
 

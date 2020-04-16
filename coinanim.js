@@ -88,7 +88,7 @@ function sendCoinonTable(stratx, starty, endx, endy) {
     sprite.ey = endy;
     sprite.anchor.x = 0.5;
     sprite.anchor.y = 0.5;
-
+    sprite.scale.set(.5, .5);
     //Get direction update vlaue
     sprite.vx = Math.sin(thita * (Math.PI / 180)) * speed * 2;
     sprite.vy = -Math.cos(thita * (Math.PI / 180)) * speed * 2;

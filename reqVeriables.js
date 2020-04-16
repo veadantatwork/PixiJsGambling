@@ -55,3 +55,8 @@ var txtbottomRight;//varible for showing balance text
 var trans_Background;
 var txtWait4Next,toolowbase;
 var tableBonus,tablePlay,tableANTE;
+var sprite_poker, sprite_roullete, sprite_roullete_Oval;
+var APP_SCREEN = 0;
+const APP_MENU = 0;
+const APP_POKER = 1;
+const APP_ROULLETE = 2;
