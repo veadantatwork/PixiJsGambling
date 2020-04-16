@@ -21,8 +21,8 @@ function DrawDynamicRect() {
         txtDydnamic.text = "WAIT FOR NEXT GAME";
     }
     graphics.drawRect(0, 25, app.screen.width, 30);
-    graphics.beginFill(0x13463d); //dark green
-    graphics.drawRect(0, 525, app.screen.width, 500);
+        // graphics.beginFill(0x13463d); //dark green
+        // graphics.drawRect(0, 525, app.screen.width, 500);
     
 }
 

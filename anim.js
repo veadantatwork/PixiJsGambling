@@ -1,14 +1,17 @@
 //Game canvas
 let app = new Application({ width: 540, height: 1024, antialiasing: true, transparent: false, resolution: window.devicePixelRatio || 1 });
+
 var element = document.getElementById("anim");//HTML elemet for placing canvas for game
 element.appendChild(app.view);//Add app view in html element
 var basepath = "./assets/";
 //Image string that uses in game 
 
 
-var imageArr = [basepath + "rollet.png",basepath + "poker.png",basepath + "rolletOval.png",
-  basepath + "tableBonus.png", basepath + "tablePlay.png", basepath + "tableANTE.png", basepath + "opecity.png", basepath + "toolowbase.png",
-basepath + "menu.png", basepath + "repeat.png", basepath + "undo.png", basepath + "bonus.png", basepath + "anteglow.png", basepath + "ante.png", basepath + "0.png", basepath + "1.png", basepath + "2.png", basepath + "3.png", basepath + "4.png", basepath + "5.png", basepath + "background.jpeg"];
+var imageArr = [basepath + "oval.png", basepath + "ovalselect.png",
+basepath + "rollet.png", basepath + "poker.png", basepath + "rolletOval.png",
+basepath + "tableBonus.png", basepath + "tablePlay.png", basepath + "tableANTE.png", basepath + "opecity.png", basepath + "toolowbase.png",
+basepath + "menu.png", basepath + "repeat.png", basepath + "undo.png", basepath + "bonus.png", basepath + "anteglow.png", basepath + "ante.png", basepath + "0.png",
+basepath + "1.png", basepath + "2.png", basepath + "3.png", basepath + "4.png", basepath + "5.png", basepath + "6.png", basepath + "background.jpeg", basepath + "background1.jpeg"];
 for (var i = 2; i < 15; i++) {
   imageArr.push(basepath + "cards/C" + i + ".png");//club card load
   imageArr.push(basepath + "cards/D" + i + ".png");//Dimond card load
@@ -26,29 +29,38 @@ function loadProgressHandler(loader, resource) {
 
 // Call after load all resources 
 function setup() {
-  document.addEventListener('touchstart', e =>{toggleFullScreen();}); //toggle fullscreen for mobile
-  document.addEventListener('mousedown', e =>{toggleFullScreen();});  //toggle fullscreen for desktop
-  background = new Sprite(resources[basepath + "background.jpeg"].texture);//create background Sprite
+  document.addEventListener('touchstart', e => { toggleFullScreen(); }); //toggle fullscreen for mobile
+  document.addEventListener('mousedown', e => { toggleFullScreen(); });  //toggle fullscreen for desktop
+  background = new Sprite(resources[basepath + "background1.jpeg"].texture);//create background Sprite
   app.stage.addChild(background);//add background Sprite in app
+  backRoulette = new Sprite(resources[basepath + "background.jpeg"].texture);//create background Sprite
+  app.stage.addChild(backRoulette);//add background Sprite in app
+  backRoulette.visible = background.visible = false;
   trans_Background = new Sprite(resources[basepath + "opecity.png"].texture);//create background Sprite
   app.stage.addChild(graphics);//add graphics in app view for drowing Rectangles
 
-  sprite_poker = loadSprite(basepath + "poker.png"    , 116, 280, 350, 1);//create and add poker Sprite in app view with click event 112
-  sprite_roullete= loadSprite(basepath + "rollet.png" , 117, 280, 500, 1);//create and add roullete Sprite in app view with click event 112
-  sprite_roullete_Oval= loadSprite(basepath + "rolletOval.png" , 118, 280, 650, 1);//create and add roullete Sprite in app view with click event 112
-  tableBonus = loadSprite(basepath + "tableBonus.png" , 113, 130, 435, 1);//create and add tableBonus Sprite in app view with click event 112
-  tablePlay = loadSprite(basepath + "tablePlay.png"   , 114, 222, 460, 1);//create and add tablePlay Sprite in app view with click event 112
-  tableANTE = loadSprite(basepath + "tableANTE.png"   , 115, 320, 460, 1);//create and add tableANTE Sprite in app view with click event 112
+
+  tableBonus = loadSprite(basepath + "tableBonus.png", 113, 130, 435, 1);//create and add tableBonus Sprite in app view with click event 112
+  tablePlay = loadSprite(basepath + "tablePlay.png", 114, 222, 460, 1);//create and add tablePlay Sprite in app view with click event 112
+  tableANTE = loadSprite(basepath + "tableANTE.png", 115, 320, 460, 1);//create and add tableANTE Sprite in app view with click event 112
   tableBonus.visible = tablePlay.visible = tableANTE.visible = false;
   sprite_undo = loadSprite(basepath + "undo.png", 112, 500, 610, 1);//create and add undo Sprite in app view with click event 112
   sprite_repeat = loadSprite(basepath + "repeat.png", 111, 500, 810, 1);//create and add repeat Sprite in app view with click event 111
   sprite_menu = loadSprite(basepath + "menu.png", 110, 500, 900, 1);//create and add menu Sprite in app view with click event 110
+
+  sprite_poker = loadSprite(basepath + "poker.png", 116, 280, 350, 1);//create and add poker Sprite in app view with click event 112
+  sprite_roullete = loadSprite(basepath + "rollet.png", 117, 280, 500, 1);//create and add roullete Sprite in app view with click event 112
+  sprite_roullete_Oval = loadSprite(basepath + "rolletOval.png", 118, 280, 650, 1);//create and add roullete Sprite in app view with click event 112
+  sprite_ovalselect = loadSprite(basepath + "oval.png", 119, 500, 810, 1);//create and add repeat Sprite in app view with click event 111
+  sprite_deselect = loadSprite(basepath + "ovalselect.png", 120, 500, 810, 1);//create and add repeat Sprite in app view with click event 111
+  sprite_ovalselect.visible = sprite_deselect.visible = false;
+
   loadRollate();
   app.stage.addChild(trans_Background);//add background Sprite in app
   trans_Background.visible = false;
   // Require small coin for flying animation  
 
-  
+
 
   for (let i = 0; i < coinArray.length; i++) {
     coinArray[i] = loadSprite(basepath + "" + i + ".png", i, posx, posy, .5);//create and add coinArray Sprite in app view with click event i(0 to 5)
@@ -87,7 +99,7 @@ function setup() {
     txt_4_card.push(loadText({ fill: "#fafafa", fontSize: 15, fontWeight: "normal" }));//create and add text for card like "player","dealer","High card" in app view
     txt_4_card[i].visible = false;
   }
-  
+
   setVisible(true);//set visiblity of coins and button
   resetValue();//call function for reset app related values
   // timeoutHandle = setTimeout(nextTurn, 1000);//set timeout function for game dynamicCounter
@@ -95,8 +107,31 @@ function setup() {
   state = play;
   app.ticker.add(delta => gameLoop(delta));
   document.addEventListener('keydown', dealWithKeyboard);
+  app.renderer.plugins.interaction.on('pointerup', touchEvent);
   setVisible(false);
+
+
+  itsOval = true;
+  // timeoutHandle = setTimeout(nextTurn, 1000);//set timeout function for game dynamicCounter
+  sprite_poker.visible = sprite_roullete.visible = true;
+  sprite_roullete_Oval.visible = false
+  // setRollate(true);
+  // resetValue();
+  // APP_SCREEN = APP_ROULLETE;
+
 }
+
+function touchEvent(event) {
+  if (dynamicCounter > 0) {
+    if (itsOval == true) {
+      Handle_OvalTuch(event);
+    } else {
+      Handle_rectTuch(event);
+    }
+  }
+
+}
+
 
 function gameLoop(delta) { state(delta); }
 
@@ -133,7 +168,7 @@ function loadSprite_2(str, x, y, s) {
   return sprite;
 }
 
-function loadText(style_var,str) {
+function loadText(style_var, str) {
   var text = new PIXI.Text(str || '629.63 ', new PIXI.TextStyle(style_var));
   app.stage.addChild(text);
   return text;
@@ -141,37 +176,49 @@ function loadText(style_var,str) {
 //callback function for onclick event
 
 
-function onButtonClick(e){
+function onButtonClick(e) {
   console.log("e.target.myCustomProperty = " + e.target.myCustomProperty);
   if (goOut != 0) {
     return;
   }
   switch (e.target.myCustomProperty) {
+    case 119:
+      itsOval = true;
+      // draw_Oval_Table();
+      setRollate(true);
+      break;
+    case 120:
+      // drawRectangle_Table();
+      itsOval = false;
+      setRollate(true);
+      break;
     case 116: //Click Poker
-    timeoutHandle = setTimeout(nextTurn, 1000);//set timeout function for game dynamicCounter
-    dynamicCounter = 15;//restart dynamicCounter
-    setVisible(true);//call when bet is oped
-    resetValue();
-    sprite_poker.visible =  sprite_roullete.visible =  sprite_roullete_Oval.visible = false;
-    APP_SCREEN = APP_POKER;
-    break;
+      timeoutHandle = setTimeout(nextTurn, 1000);//set timeout function for game dynamicCounter
+      dynamicCounter = 15;//restart dynamicCounter
+      setVisible(true);//call when bet is oped
+      resetValue();
+      sprite_poker.visible = sprite_roullete.visible = sprite_roullete_Oval.visible = false;
+      background.visible = true;
+      tableBonus.visible = tablePlay.visible = tableANTE.visible = true;
+      APP_SCREEN = APP_POKER;
+      break;
     case 118: case 117: //Click Roullete
-    itsOval = e.target.myCustomProperty == 118;
-    timeoutHandle = setTimeout(nextTurn, 1000);//set timeout function for game dynamicCounter
-    sprite_poker.visible =  sprite_roullete_Oval.visible =  sprite_roullete.visible = false;
-    setRollate(true);
-    resetValue();
-    APP_SCREEN = APP_ROULLETE;
-    
-    break;
-    case 113:case 114:case 115: 
-    if(dynamicCounter<0)
-    {
-      txtWait4Next.myCustomProperty = 100;
+      dynamicCounter = -1;//restart dynamicCounter
+      itsOval = e.target.myCustomProperty == 118;
+      timeoutHandle = setTimeout(nextTurn, 1000);//set timeout function for game dynamicCounter
+      sprite_poker.visible = sprite_roullete_Oval.visible = sprite_roullete.visible = false;
+      setRollate(true);
+      resetValue();
+      APP_SCREEN = APP_ROULLETE;
+      backRoulette.visible = true;
+      break;
+    case 113: case 114: case 115:
+      if (dynamicCounter < 0) {
+        txtWait4Next.myCustomProperty = 100;
         txtWait4Next.position.set(210, 350);
         txtWait4Next.text = "Wait for next game";
-    }
-    return;//click for menu button
+      }
+      return;//click for menu button
     case 110: return;//click for menu button
     case 111: sendCoinonTable(500, 810, 320, 458); return;//click for reapeat button
     case 112: undoValuse();
@@ -243,10 +290,10 @@ function play(delta) {
     case APP_MENU:
       break;
     case APP_POKER:
-        coinAnim();// draw coin animation form coinAnim.js
-        DrawDynamicRect();// draw Rect form dynamicRect.js
-        drawCards();// draw Card from form dynamicRect.js
-        
+      coinAnim();// draw coin animation form coinAnim.js
+      DrawDynamicRect();// draw Rect form dynamicRect.js
+      drawCards();// draw Card from form dynamicRect.js
+
       break;
     case APP_ROULLETE:
       coinAnim();// draw coin animation form coinAnim.js
@@ -255,8 +302,8 @@ function play(delta) {
       break;
   }
 
- 
-   allcounter++;
+
+  allcounter++;
 }
 //set timeout function for game dynamicCounter
 function nextTurn() {
@@ -266,7 +313,7 @@ function nextTurn() {
   timeoutHandle = setTimeout(nextTurn, 1000);//reset timeout function for game dynamicCounter
 
 
-  if(APP_SCREEN == APP_POKER){
+  if (APP_SCREEN == APP_POKER) {
     if (dynamicCounter == 0) {//call when bet is closed
       setVisible(false);
     }
@@ -275,7 +322,7 @@ function nextTurn() {
       setVisible(true);//call when bet is oped
       resetValue();
     }
-  }else{
+  } else {
     if (dynamicCounter == 0) {//call when bet is closed
       setRollate(false);
     }
@@ -298,7 +345,7 @@ function setVisible(isvisible) {//set visiblity of bat button and coin
   sprite_bonus.visible = isvisible;
   sprite_GlowAnte.visible = isvisible;
   trans_Background.visible = false;
-  
+
 }
 function resetValue() {//reset game valuse
   currentbat = 0;//reset bet of game
@@ -322,6 +369,7 @@ function resetValue() {//reset game valuse
     txt_4_card[i].visible = false;//false visible text for card like "player","dealer","High card" in app view
   }
   while (value4undo.length) { value4undo.pop(); }//remove all bat from last game
+  rolletCoin.removeCoins();
 }
 function make_deck() {//asign card valus
   var i;
@@ -347,7 +395,12 @@ function compRan() {
 resize();
 function resize() {
   var ratio = .53;
+  if (window.innerWidth / window.innerHeight < .77) {
+    ratio = window.innerWidth / window.innerHeight;
+  }
+  console.log("~~~" + (window.innerWidth / window.innerHeight));
   if (window.innerWidth / window.innerHeight >= ratio) {
+
     ancho = ~~(window.innerHeight * ratio);
     alto = window.innerHeight;
     app.view.style.position = 'absolute';

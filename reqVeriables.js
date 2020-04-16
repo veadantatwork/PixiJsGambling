@@ -5,7 +5,7 @@ let Application = PIXI.Application,
   TextureCache = PIXI.utils.TextureCache,
   Sprite = PIXI.Sprite;
 var state;
-var background;
+var background,backRoulette;
 var count = 100;//for flying animation count 
 var goOut = 0;//for fluing animation horizontal movment
 var selCoin = 0;//selected coin 
@@ -22,7 +22,7 @@ var txt_4_card = [];
 var dynamicCounter = 15;
 
 var currentbat = 0;
-var balance = 999;
+var balance = 999999;
 
 var allcounter = 0;
 
@@ -47,7 +47,7 @@ var my_players = [
   this.total_bet = 0;
   this.subtotal_bet = 0;
 }
-
+const coinValue = [2.5, 5, 25, 125, 500, 2500];//coins valuse that uses for bat values
 var sprite_menu, sprite_repeat,sprite_undo; // button for menu, undo and repeat
 var value4undo = [];
 var txtbottomLeft;//varible for showing balance text
@@ -56,6 +56,7 @@ var trans_Background;
 var txtWait4Next,toolowbase;
 var tableBonus,tablePlay,tableANTE;
 var sprite_poker, sprite_roullete, sprite_roullete_Oval;
+var sprite_ovalselect,sprite_deselect;
 var APP_SCREEN = 0;
 const APP_MENU = 0;
 const APP_POKER = 1;

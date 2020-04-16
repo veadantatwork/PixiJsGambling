@@ -127,6 +127,9 @@ function Rect2RectIntersection(ax,ay,adx,ady,bx,by,bdx,bdy){
 	return false;
 }
 function CircRectsOverlap(CRX, CRY, CRDX, CRDY,centerX,centerY,radius) {
+	CRX += CRDX*.5;
+	CRY += CRDY*.5;
+
 	if ((Math.abs(centerX - CRX) <= (CRDX + radius)) && (Math.abs(centerY - CRY) <= (CRDY + radius)))
 		return true;
 	return false;

@@ -1,4 +1,4 @@
-const coinValue = [2.5, 5, 25, 125, 500, 2500];//coins valuse that uses for bat values
+
 
 function coinAnim() {
     if (count < (110 / speed)) {//For flying animation counts
